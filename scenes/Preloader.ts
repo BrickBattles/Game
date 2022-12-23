@@ -7,12 +7,16 @@ export default class Preloader extends Scene {
     
     preload() {
         // Load assets
-        // this.load.image('brick', 'assets/brick.png');    
+        this.load.image('brick', 'textures/brick.png');    
        
+        
         
     }
     
     create() {
+        this.physics.world.on('worldbounds', function(body: any) {
+            console.log('worldbounds');
+        }); 
         // Create scene
         this.scene.start('mainscene');
     }    

@@ -7,11 +7,13 @@ export default class Preloader extends Scene {
     
     preload() {
         // Load assets
-        // this.load.image('brick', 'assets/brick.png');        
+        // this.load.image('brick', 'assets/brick.png');    
+       
+        
     }
     
     create() {
         // Create scene
-        this.scene.start('testscene');
+        this.scene.start('mainscene');
     }    
 }

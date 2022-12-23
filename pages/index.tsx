@@ -19,7 +19,8 @@ const Game = () => {
         height: 500,
         backgroundColor: "#ffffff",
         parent: "game-content",
-        physics: {
+        pixelArt: true,
+        physics: { 
           default: "arcade",
           arcade: {
             gravity: { y: 200 },
@@ -27,9 +28,15 @@ const Game = () => {
           }
         },
         scene: [
-            Preloader,
+            Preloader, 
             MainScene
         ],
+        scale: {
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,    
+          width: 700,
+          height: 400,
+        },
       });
       
       setGame(PhaserGame);      
@@ -39,7 +46,7 @@ const Game = () => {
 
   return (
     <>
-      <div id="game-content" key="game-content">
+      <div id="game-content" key="game-content" className="block">
         {/* where the canvas will be rendered */}
       </div>
 

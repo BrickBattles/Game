@@ -10,7 +10,7 @@ import { MatchState, PlayerState } from "../customTypes/states";
 let socket: Socket;
 
 const Home = () => {
-  let [matches, setMatches] = useState<MatchStorage>({});
+  let [matchData, setMatchData] = useState<MatchStorage>({});
     
   useEffect(() => {
     const socketInitializer = async () => {
@@ -23,8 +23,8 @@ const Home = () => {
         socket.emit("join", { data: "player data", address: uuidv4(), state: PlayerState.NEW});
         // socket.emit("join", { data: "player data", address: '0x00123', state: PlayerState.NEW});
 
-        socket.on("update_matches", (curMatches:{[key: string]: Match}) => {          
-          setMatches(curMatches);
+        socket.on("update_matchData", (curMatches:{[key: string]: Match}) => {          
+          setMatchData(curMatches);          
         });
         
       });
@@ -43,9 +43,8 @@ const Home = () => {
       <button className="btn" onClick={createMatch}>
         Create
       </button>
-
-      <h1>List of matches</h1>
-      <MatchTable matchData={matches} />
+      
+      <MatchTable {...matchData}/>
 
       
     </div>

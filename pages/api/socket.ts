@@ -18,8 +18,10 @@ const SocketHandler = (req: any, res: any) => {
     io.on("connection", (socket) => {
       
       socket.on("join", (data: Player) => {
-        playerData[data.address] = data;
+        console.log(`player_joined: ${data.address}`);
 
+        playerData[data.address] = data;
+        
         // init new player with matchData
         socket.emit("update_matchData", matchData);
       });

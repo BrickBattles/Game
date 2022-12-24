@@ -1,6 +1,6 @@
-type player = {
+type Player = {
     address: string,
     data: any
   }
 
-export default player;
+export default Player;

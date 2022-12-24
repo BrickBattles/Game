@@ -2,9 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { Server, Socket } from "socket.io";
+import Match from "../../customTypes/match";
 
 // socketid -> player data
 let players: {[key: string]: any} = {};
+let matches: Array<Match> = [];
 
 const SocketHandler = (req: any, res: any) => {
 
@@ -16,18 +18,18 @@ const SocketHandler = (req: any, res: any) => {
       
       socket.on('join', (data: any) => {        
         players[socket.id] = data;
-        socket.emit('player_joined', socket.id);
-        console.log('player_joined: ' + socket.id);        
+        socket.emit('update_matches', matches);        
+      });
+
+      socket.on('createMatch', (data: Match) => {
+        matches.push(data);
+        socket.broadcast.emit('update_matches', matches);        
+        socket.emit('update_matches', matches);
       });
 
       socket.on('disconnect', () => {                      
         console.log(`player_left: ${socket.id}`);
       });
-
-      // io.on("disconnect", (socket) => {            
-      //   console.log('io disconnected')
-        
-      // });
   
     });
 

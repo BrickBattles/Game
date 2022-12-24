@@ -33,4 +33,5 @@ export default class MainScene extends Scene {
         // Update scene        
         this.players.forEach(player => player.update());        
     }
+    
 }

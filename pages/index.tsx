@@ -1,26 +1,26 @@
 import { useEffect } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-let socket;
+let socket: Socket;
 
 const Home = () => {
   
   useEffect(() => {
     const socketInitializer = async () => {
       await fetch("/api/socket");
-      socket = io();
-  
-      socket.on("connect", () => {
-        console.log("connected");
+      socket = io({        
+        forceNew: true,
       });
+      
+      socket.on("connect", () => {                
+        socket.emit('join', {data: 'player data'});
+      });
+            
     };
 
     socketInitializer();
   }, []);
-
-  
-
-  return null;
+    
 };
 
 export default Home;

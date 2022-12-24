@@ -8,7 +8,7 @@ export default class Preloader extends Scene {
     preload() {        
         // Load assets
         this.load.image('brick', 'textures/silver.png');   
-        this.load.image('background', 'backgrounds/2.png');                        
+        this.load.image('background', 'backgrounds/3.png');                        
     }
     
     create() {

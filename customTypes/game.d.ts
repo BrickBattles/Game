@@ -9,7 +9,7 @@ export type PlayerStorage = { [key: string]: Player };
 
 export type Match = {
   id: string;
-  players: PlayerStorage;
+  playerData: PlayerStorage;
   state: MatchState;
 };
 export type MatchStorage = { [key: string]: Match };

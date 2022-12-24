@@ -7,8 +7,8 @@ import { Match, MatchStorage, Player, PlayerStorage } from "../../customTypes/ga
 import { MatchState, PlayerState } from "../../customTypes/states";
 
 // socketid -> player data
-let players: PlayerStorage = {};
-let matches: MatchStorage = {};
+let playerData: PlayerStorage = {};
+let matchData: MatchStorage = {};
 
 const SocketHandler = (req: any, res: any) => {
   if (!res.socket.server.io) {
@@ -18,10 +18,10 @@ const SocketHandler = (req: any, res: any) => {
     io.on("connection", (socket) => {
       
       socket.on("join", (data: Player) => {
-        players[data.address] = data;
+        playerData[data.address] = data;
 
-        // init new player with matches
-        socket.emit("update_matches", matches);
+        // init new player with matchData
+        socket.emit("update_matchData", matchData);
       });
 
       socket.on("disconnect", () => {
@@ -31,31 +31,31 @@ const SocketHandler = (req: any, res: any) => {
       socket.on("createMatch", (data: Match) => {
         let id = uuidv4();
         data.id = id;
-        matches[id] = data;
-        matches[id].state = MatchState.WAITING_FOR_PLAYERS;
+        matchData[id] = data;
+        matchData[id].state = MatchState.WAITING_FOR_PLAYERS;
 
-        socket.broadcast.emit("update_matches", matches);
-        socket.emit("update_matches", matches);
+        socket.broadcast.emit("update_matchData", matchData);
+        socket.emit("update_matchData", matchData);
       });
 
       socket.on("joinMatch", (id: string, p: Player) => {
         if (
-          matches[id] &&
-          matches[id].state == MatchState.WAITING_FOR_PLAYERS &&
-          Object.keys(matches[id].players).length < 2 &&
-          players[p.address] &&
-          players[p.address].state == PlayerState.READY
+          matchData[id] &&
+          matchData[id].state == MatchState.WAITING_FOR_PLAYERS &&
+          Object.keys(matchData[id].playerData).length < 2 &&
+          playerData[p.address] &&
+          playerData[p.address].state == PlayerState.READY
         ) {
           p.state = PlayerState.IN_MATCH;
-          players[p.address] = p; 
-          matches[id].players[p.address] = p;
+          playerData[p.address] = p; 
+          matchData[id].playerData[p.address] = p;
 
-          if (Object.keys(matches[id].players).length == 2) {
-            matches[id].state = MatchState.READY;
+          if (Object.keys(matchData[id].playerData).length == 2) {
+            matchData[id].state = MatchState.READY;
           }
 
-          socket.broadcast.emit("update_matches", matches);
-          socket.emit("update_matches", matches);
+          socket.broadcast.emit("update_matchData", matchData);
+          socket.emit("update_matchData", matchData);
 
           console.log(`player_joined: ${p.address} to match: ${id}`);
         }

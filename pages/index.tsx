@@ -3,7 +3,7 @@ import { use, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { v4 as uuidv4, validate } from "uuid";
 
-import { Match, Player} from "../customTypes/game";
+import { Match, MatchStorage, Player, PlayerStorage} from "../customTypes/game";
 import { MatchState, PlayerState } from "../customTypes/states";
 
 let socket: Socket;
@@ -33,7 +33,7 @@ const Home = () => {
   }, []);
 
   const createMatch = () => {
-    let m: Match = {id: "123", players: [], state: MatchState.NEW}
+    let m: Match = {id: "123", players: {}, state: MatchState.NEW}
     socket.emit("createMatch", m);    
   };
 

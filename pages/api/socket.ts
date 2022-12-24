@@ -3,12 +3,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Server, Socket } from "socket.io";
 import { v4 as uuidv4, validate } from "uuid";
 
-import { Match, Player} from "../../customTypes/game";
+import { Match, MatchStorage, Player, PlayerStorage } from "../../customTypes/game";
 import { MatchState, PlayerState } from "../../customTypes/states";
 
 // socketid -> player data
-let players: { [key: string]: Player } = {};
-let matches: { [key: string]: Match } = {};
+let players: PlayerStorage = {};
+let matches: MatchStorage = {};
 
 const SocketHandler = (req: any, res: any) => {
   if (!res.socket.server.io) {
@@ -42,15 +42,15 @@ const SocketHandler = (req: any, res: any) => {
         if (
           matches[id] &&
           matches[id].state == MatchState.WAITING_FOR_PLAYERS &&
-          matches[id].players.length < 2 &&
+          Object.keys(matches[id].players).length < 2 &&
           players[p.address] &&
           players[p.address].state == PlayerState.READY
         ) {
           p.state = PlayerState.IN_MATCH;
-          players[p.address] = p;
-          matches[id].players.push(p);
+          players[p.address] = p; 
+          matches[id].players[p.address] = p;
 
-          if (matches[id].players.length == 2) {
+          if (Object.keys(matches[id].players).length == 2) {
             matches[id].state = MatchState.READY;
           }
 

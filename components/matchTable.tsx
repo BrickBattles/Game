@@ -29,11 +29,11 @@ const MatchTable = (matchData: MatchStorage) => {
               return (
                 <tr>
                   <td>{match.id}</td>
-                  <td>
-                    {Object.keys(match.playerData).map((key) => {
+                  <td> {`${Object.keys(match.playerData).length}/2`}
+                    {/* {Object.keys(match.playerData).map((key) => {
                       let player = match.playerData[key];
                       return <>{player.address}</>;
-                    })}
+                    })} */}
                   </td>
                   <td>{MatchState[match.state]}</td>
                   <td>100ETH</td>

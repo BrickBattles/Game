@@ -1,13 +1,16 @@
+import { SocketAddress } from "net";
 import { use, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { v4 as uuidv4, validate } from "uuid";
 
-import Match from "../customTypes/match";
+import { Match, Player} from "../customTypes/game";
+import { MatchState, PlayerState } from "../customTypes/states";
 
 let socket: Socket;
 
 const Home = () => {
-  let [matches, setMatches] = useState<Array<Match>>([]);
-  
+  let [matches, setMatches] = useState<{[key: string]: Match}>({});
+    
   useEffect(() => {
     const socketInitializer = async () => {
       await fetch("/api/socket");
@@ -15,11 +18,12 @@ const Home = () => {
         forceNew: true,
       });
 
-      socket.on("connect", () => {
-        socket.emit("join", { data: "player data" });
+      socket.on("connect", () => {        
+        socket.emit("join", { data: "player data", address: uuidv4(), state: PlayerState.NEW});
+        // socket.emit("join", { data: "player data", address: '0x00123', state: PlayerState.NEW});
 
-        socket.on("update_matches", (curMatches: Array<Match>) => {          
-          setMatches(curMatches);                    
+        socket.on("update_matches", (curMatches:{[key: string]: Match}) => {          
+          setMatches(curMatches);
         });
         
       });
@@ -29,8 +33,8 @@ const Home = () => {
   }, []);
 
   const createMatch = () => {
-    let m: Match = {id: "123", players: []}
-    socket.emit("createMatch", m);
+    let m: Match = {id: "123", players: [], state: MatchState.NEW}
+    socket.emit("createMatch", m);    
   };
 
   return (
@@ -41,20 +45,7 @@ const Home = () => {
 
       <h1>List of matches</h1>
 
-      <>
-        {matches ? (
-          matches.map((data: Match, key) => {            
-            
-            return (
-              <div key={key}>
-                <h2>{`${data.id}`}</h2>                
-              </div>
-            );
-          })                    
-        ) : (
-          <p>No matches</p>
-        )}
-      </>
+      
     </div>
   );
 };

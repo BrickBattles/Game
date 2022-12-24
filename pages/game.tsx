@@ -1,10 +1,11 @@
 
 import { useEffect, useState} from "react";
 import {Game as GameType} from "phaser";
+import { Match, Player} from "../customTypes/game";
+import { MatchState, PlayerState } from "../customTypes/states";
 
-const Game = () => {
-  const [ game, setGame ] = useState<GameType>();
-
+const Game = (match: Match) => {
+  
   useEffect(() => {
     async function initPhaser() {
 
@@ -37,10 +38,12 @@ const Game = () => {
           width: 700,
           height: 400,
         },
+        
       });
+
       
-      setGame(PhaserGame);      
     }
+
     initPhaser();
   }, []);
 

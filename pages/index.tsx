@@ -1,57 +1,26 @@
+import { useEffect } from "react";
+import { io } from "socket.io-client";
 
-import { useEffect, useState} from "react";
-import {Game as GameType} from "phaser";
+let socket;
 
-const Game = () => {
-  const [ game, setGame ] = useState<GameType>();
-
+const Home = () => {
+  
   useEffect(() => {
-    async function initPhaser() {
-
-      const Phaser = await import("phaser");
-      
-      const { default: Preloader } = await import("../scenes/Preloader");
-      const { default: MainScene } = await import("../scenes/MainScene");
-
-      const PhaserGame = new Phaser.Game({
-        type: Phaser.AUTO,
-        width: 1000,
-        height: 500,
-        backgroundColor: "#ffffff",
-        parent: "game-content",
-        pixelArt: true,
-        physics: { 
-          default: "arcade",
-          arcade: {
-            gravity: { y: 200 },
-            debug: true
-          }
-        },
-        scene: [
-            Preloader, 
-            MainScene
-        ],
-        scale: {
-          mode: Phaser.Scale.FIT,
-          autoCenter: Phaser.Scale.CENTER_BOTH,    
-          width: 700,
-          height: 400,
-        },
+    const socketInitializer = async () => {
+      await fetch("/api/socket");
+      socket = io();
+  
+      socket.on("connect", () => {
+        console.log("connected");
       });
-      
-      setGame(PhaserGame);      
-    }
-    initPhaser();
+    };
+
+    socketInitializer();
   }, []);
 
-  return (
-    <>
-      <div id="game-content" key="game-content" className="block">
-        {/* where the canvas will be rendered */}
-      </div>
+  
 
-    </>
-  )
+  return null;
 };
 
-export default Game;
+export default Home;

@@ -40,11 +40,10 @@ const SocketHandler = (req: any, res: any) => {
       });
 
       socket.on("join_match", (match_id: string) => {
-        if (manager.joinMatch(match_id, socket.id)) {
-          
-          let enemy = manager.getMatchById(match_id).enemy;
+        if (manager.joinMatch(match_id, socket.id)) {          
+          let other_player = manager.getMatchById(match_id).player;
+          io.sockets.sockets.get(other_player.id)?.join(match_id);          
           io.sockets.sockets.get(socket.id)?.join(match_id)
-          io.sockets.sockets.get(enemy.id)?.join(match_id);
           io.to(match_id).emit("start_match", match_id);
         }                       
       });

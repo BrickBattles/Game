@@ -18,8 +18,7 @@ const Home = () => {
       await fetch("/api/socket");
       socket = io({forceNew: true});
 
-      socket.on("connect", () => {      
-        console.log('client ' + socket.id + ' connected to server');
+      socket.on("connect", () => {            
         socket.emit("join_game", '0x00');
         
         socket.on("update_match_table", (data) => {            
@@ -36,8 +35,7 @@ const Home = () => {
     socketInitializer();
   }, []);
 
-  const createMatch = () => {   
-    console.log('client creatematchid ' + socket.id); 
+  const createMatch = () => {       
     socket.emit("create_match");
   };
 

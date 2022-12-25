@@ -17,7 +17,7 @@ const SocketHandler = (req: any, res: any) => {
     io.on("connection", (socket) => {
       socket.on("join_game", (addr: string) => {          
         if(manager.createPlayer(socket.id, addr)) {
-          socket.emit("update_matchData", manager.getMatchDataForTable());
+          socket.emit("update_match_table", manager.getMatchDataForTable());
         }
         else {
           console.log('create player failed')
@@ -31,7 +31,9 @@ const SocketHandler = (req: any, res: any) => {
 
       socket.on("create_match", () => {        
         if(manager.createMatch(socket.id)) {
+          
           io.sockets.in('/').emit("update_match_table", manager.getMatchDataForTable());
+          socket.emit("update_match_table", manager.getMatchDataForTable());
         }else {
           console.log('create match failed')
         }

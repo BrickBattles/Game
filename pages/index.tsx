@@ -24,6 +24,7 @@ const Home = () => {
         // socket.emit("join", { data: "player data", address: '0x00123', state: PlayerState.NEW});
 
         socket.on("update_matchData", (curMatches:{[key: string]: Match}) => {          
+          console.log("update_matchData", curMatches)
           setMatchData(curMatches);          
         });
         
@@ -42,11 +43,20 @@ const Home = () => {
     socket.emit("join_match", matchId);
   };
 
+  const test = () => {
+    setMatchData({test: {id: "123", playerData: {}, state: MatchState.NEW}})
+  }
+
   return (
     <div>
       <button className="btn" onClick={createMatch}>
         Create
       </button>
+
+    <button className="btn" onClick={test}>
+      test
+      </button>
+
       
       <MatchTable data={matchData} join={joinMatch} />    
     </div>          

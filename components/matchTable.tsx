@@ -8,6 +8,10 @@ const MatchTable: NextPage<{data: MatchStorage, join: Function}> = ({
   join
 }) => {
 
+  useEffect(() => {
+    console.log("MatchTable", data);
+  }, [data]);
+
   return (
     <div>
       <div className="overflow-x-auto">

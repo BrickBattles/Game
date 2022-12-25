@@ -24,7 +24,9 @@ const SocketHandler = (req: any, res: any) => {
       socket.on("join_game", (p: Player) => {
         console.log(`player_joined: ${socket.id}`);
 
+        p.state = PlayerState.READY;
         playerData[socket.id] = p;
+
 
         // init new player with matchData
         socket.emit("update_matchData", matchData);
@@ -44,8 +46,7 @@ const SocketHandler = (req: any, res: any) => {
         socket.emit("update_matchData", matchData);
       });
 
-      socket.on("join_match", (matchID: string) => {        
-        console.log(`join match: ${matchID} to match: player ${socket.id}`);
+      socket.on("join_match", (matchID: string) => {                
         if (
           matchData[matchID] &&
           matchData[matchID].state == MatchState.WAITING_FOR_PLAYERS &&
@@ -69,6 +70,9 @@ const SocketHandler = (req: any, res: any) => {
             socket.emit("update_matchData", matchData);
 
             console.log(`player_joined_match: ${p.id} to match: ${matchID}`);
+          }
+          else {
+            console.log(`FAILED player check join_match: ${matchID} to match: player ${socket.id} failed`);
           }
         }
         else {

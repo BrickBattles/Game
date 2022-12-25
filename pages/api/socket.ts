@@ -23,10 +23,10 @@ const SocketHandler = (req: any, res: any) => {
     io.on("connection", (socket) => {
       socket.on("join_game", (p: Player) => {
         console.log(`player_joined: ${socket.id}`);
-
+        
+        p.id = socket.id;
         p.state = PlayerState.READY;
         playerData[socket.id] = p;
-
 
         // init new player with matchData
         socket.emit("update_matchData", matchData);
@@ -63,20 +63,21 @@ const SocketHandler = (req: any, res: any) => {
             matchData[matchID].playerData[p.id] = p;
 
             if (Object.keys(matchData[matchID].playerData).length == 2) {
-              matchData[matchID].state = MatchState.READY;
+              // start match
+              matchData[matchID].state = MatchState.READY
+              let player1 = matchData[matchID].playerData[Object.keys(matchData[matchID].playerData)[0]];
+              let player2 = matchData[matchID].playerData[Object.keys(matchData[matchID].playerData)[1]];
+                            
+              // put both players in same room
+              io.sockets.sockets.get(player1.id)?.join(matchID);
+              io.sockets.sockets.get(player2.id)?.join(matchID);
+              io.to(matchID).emit('start_match', matchID);              
             }
-
+            
             socket.broadcast.emit("update_matchData", matchData);
-            socket.emit("update_matchData", matchData);
-
-            console.log(`player_joined_match: ${p.id} to match: ${matchID}`);
+            socket.emit("update_matchData", matchData);     
           }
-          else {
-            console.log(`FAILED player check join_match: ${matchID} to match: player ${socket.id} failed`);
-          }
-        }
-        else {
-          console.log(`FAILED match check join_match: ${matchID} to match: player ${socket.id} failed`);
+          
         }
       });
     });

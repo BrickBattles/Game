@@ -1,6 +1,7 @@
 import { MatchState, PlayerState } from "./states";
 
 export type Player = {
+  id: string;
   address: string;
   data: any;
   state: PlayerState;

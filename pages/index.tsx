@@ -20,7 +20,7 @@ const Home = () => {
       });
 
       socket.on("connect", () => {        
-        socket.emit("join", { data: "player data", address: uuidv4(), state: PlayerState.NEW});
+        socket.emit("join_game", { id: uuidv4(), data: "player data", address: '0x0012324', state: PlayerState.NEW});
         // socket.emit("join", { data: "player data", address: '0x00123', state: PlayerState.NEW});
 
         socket.on("update_matchData", (curMatches:{[key: string]: Match}) => {          
@@ -35,7 +35,11 @@ const Home = () => {
 
   const createMatch = () => {
     let m: Match = {id: "123", playerData: {}, state: MatchState.NEW}
-    socket.emit("createMatch", m);    
+    socket.emit("create_match", m);    
+  };
+  
+  const joinMatch = (matchId: string) => {
+    socket.emit("join_match", matchId);
   };
 
   return (
@@ -44,10 +48,8 @@ const Home = () => {
         Create
       </button>
       
-      <MatchTable {...matchData}/>
-
-      
-    </div>
+      <MatchTable data={matchData} join={joinMatch} />    
+    </div>          
   );
 };
 

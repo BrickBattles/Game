@@ -1,11 +1,12 @@
+import { NextComponentType, NextPage } from "next";
 import { useEffect } from "react";
 import { Match, MatchStorage } from "../customTypes/game";
 import { MatchState } from "../customTypes/states";
 
-const MatchTable = (matchData: MatchStorage) => {
-  useEffect(() => {
-    console.log("MatchTable: ", matchData);
-  }, [matchData]);
+const MatchTable: NextPage<{data: MatchStorage, join: Function}> = ({ 
+  data,
+  join
+}) => {
 
   return (
     <div>
@@ -24,21 +25,20 @@ const MatchTable = (matchData: MatchStorage) => {
           <tbody>
             {/* <!-- row 1 --> */}
 
-            {Object.keys(matchData).map((key) => {
-              let match: Match = matchData[key];
+            {Object.keys(data).map((key) => {
+              let match: Match = data[key];
               return (
                 <tr>
                   <td>{match.id}</td>
-                  <td> {`${Object.keys(match.playerData).length}/2`}
-                    {/* {Object.keys(match.playerData).map((key) => {
-                      let player = match.playerData[key];
-                      return <>{player.address}</>;
-                    })} */}
+                  <td>                    
+                    {`${Object.keys(match.playerData).length}/2`}
                   </td>
                   <td>{MatchState[match.state]}</td>
                   <td>100ETH</td>
                   <td>
-                    <button className="btn btn-primary">Join</button>
+                    <button className="btn btn-primary" onClick={() => {join(match.id)}}>
+                      Join
+                    </button>
                   </td>
                 </tr>
               );

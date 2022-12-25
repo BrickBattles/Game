@@ -3,7 +3,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Server, Socket } from "socket.io";
 import { v4 as uuidv4, validate } from "uuid";
 
-import { Match, MatchStorage, Player, PlayerStorage } from "../../customTypes/game";
+import {
+  Match,
+  MatchStorage,
+  Player,
+  PlayerStorage,
+} from "../../customTypes/game";
 import { MatchState, PlayerState } from "../../customTypes/states";
 
 // socketid -> player data
@@ -16,12 +21,11 @@ const SocketHandler = (req: any, res: any) => {
     res.socket.server.io = io;
 
     io.on("connection", (socket) => {
-      
-      socket.on("join", (data: Player) => {
-        console.log(`player_joined: ${data.address}`);
+      socket.on("join_game", (p: Player) => {
+        console.log(`player_joined: ${socket.id}`);
 
-        playerData[data.address] = data;
-        
+        playerData[socket.id] = p;
+
         // init new player with matchData
         socket.emit("update_matchData", matchData);
       });
@@ -30,7 +34,7 @@ const SocketHandler = (req: any, res: any) => {
         console.log(`player_left: ${socket.id}`);
       });
 
-      socket.on("createMatch", (data: Match) => {
+      socket.on("create_match", (data: Match) => {
         let id = uuidv4();
         data.id = id;
         matchData[id] = data;
@@ -40,26 +44,35 @@ const SocketHandler = (req: any, res: any) => {
         socket.emit("update_matchData", matchData);
       });
 
-      socket.on("joinMatch", (id: string, p: Player) => {
+      socket.on("join_match", (matchID: string) => {        
+        console.log(`join match: ${matchID} to match: player ${socket.id}`);
         if (
-          matchData[id] &&
-          matchData[id].state == MatchState.WAITING_FOR_PLAYERS &&
-          Object.keys(matchData[id].playerData).length < 2 &&
-          playerData[p.address] &&
-          playerData[p.address].state == PlayerState.READY
-        ) {
-          p.state = PlayerState.IN_MATCH;
-          playerData[p.address] = p; 
-          matchData[id].playerData[p.address] = p;
+          matchData[matchID] &&
+          matchData[matchID].state == MatchState.WAITING_FOR_PLAYERS &&
+          Object.keys(matchData[matchID].playerData).length < 2
+          ) {            
+            
+          if (
+            playerData[socket.id] &&
+            playerData[socket.id].state == PlayerState.READY
+          ) {
+            let p = playerData[socket.id];
+            p.state = PlayerState.IN_MATCH;
+            playerData[p.id] = p;
+            matchData[matchID].playerData[p.id] = p;
 
-          if (Object.keys(matchData[id].playerData).length == 2) {
-            matchData[id].state = MatchState.READY;
+            if (Object.keys(matchData[matchID].playerData).length == 2) {
+              matchData[matchID].state = MatchState.READY;
+            }
+
+            socket.broadcast.emit("update_matchData", matchData);
+            socket.emit("update_matchData", matchData);
+
+            console.log(`player_joined_match: ${p.id} to match: ${matchID}`);
           }
-
-          socket.broadcast.emit("update_matchData", matchData);
-          socket.emit("update_matchData", matchData);
-
-          console.log(`player_joined: ${p.address} to match: ${id}`);
+        }
+        else {
+          console.log(`FAILED match check join_match: ${matchID} to match: player ${socket.id} failed`);
         }
       });
     });

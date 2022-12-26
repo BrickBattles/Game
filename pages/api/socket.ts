@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Server, Socket } from "socket.io";
 import GameManager from "./gameManager";
+import { Player } from "../../classes/player";
 
 let manager: GameManager;
 
@@ -37,6 +38,12 @@ const SocketHandler = (req: any, res: any) => {
         }else {
           console.log('create match failed')
         }
+      });
+
+      socket.on("req_update_game", (match_id: string, p: Player) => {
+        manager.updatePlayer(match_id, p);        
+        socket.emit('res_update_game', manager.getOpponentData(match_id, p.id));
+        console.log('res_update_game', manager.getOpponentData(match_id, p.id));
       });
 
       socket.on("join_match", (match_id: string) => {

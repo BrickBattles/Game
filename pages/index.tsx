@@ -3,9 +3,6 @@ import { io, Socket } from "socket.io-client";
 import MatchTable from "../components/web/matchTable";
 import Game from "../components/game/game";
 
-import {Match, MatchState} from "../classes/match";
-import {Player, PlayerState} from "../classes/player";
-
 let socket: Socket;
 
 const Home = () => {
@@ -47,7 +44,7 @@ const Home = () => {
     <div>
       {match_id ? (
         <div>
-          <Game matchID={match_id} socket={socket!}/>
+          <Game matchID={match_id} socket={socket}/>
         </div>
       ) : (
         <div>

@@ -1,8 +1,7 @@
 
 import { useEffect, useState} from "react";
 import {Game as GameType} from "phaser";
-import { Match, Player} from "../../classes/game";
-import { MatchState, PlayerState } from "../../classes/states";
+
 import { NextPage } from "next";
 import { Socket } from "socket.io-client";
 
@@ -45,8 +44,9 @@ const Game: NextPage<{matchID:string, socket: Socket}> = (
         },
         
       });
-
       
+      PhaserGame.registry.set("matchID", matchID.matchID);
+      // PhaserGame.scene.start("Preloader", {matchID: matchID.matchID, socket: socket.socket});      
     }
 
     initPhaser();

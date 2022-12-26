@@ -71,6 +71,44 @@ class GameManager {
     return data;
   }
 
+  // returns opponent data from match
+  public getOpponentData(match_id: string, id: string) {    
+    
+    if (!this._matches[match_id]) return null;
+    if (!this._players[id]) return null;
+
+    const match = this._matches[match_id];
+    const player = this._players[id];
+
+    if (match.player.id == player.id) {
+      return match.enemy
+    }
+    else if (match.enemy && match.enemy.id == player.id) {
+      return match.player
+    }
+
+    return null;    
+  }
+
+  public updatePlayer(match_id: string, p: Player): boolean {
+    if (!this._matches[match_id]) return false;
+    const match = this._matches[match_id];
+
+    if (match.player.id == p.id) {
+      match.player.x = p.x;
+      match.player.y = p.y;
+    }
+    else if (match.enemy && match.enemy.id == p.id) {
+      match.enemy.x = p.x;
+      match.enemy.y = p.y;
+    }
+    else {
+      return false;
+    }
+
+    return true;
+  }
+
   public joinMatch(match_id: string, enemy_id: string): boolean {
     if (
       !this._matches[match_id] || // match doesn't exist

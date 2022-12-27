@@ -1,4 +1,4 @@
-import {Player} from "./player";
+import {Player, PlayerState} from "./player";
 
 export enum MatchState {  
   WAITING_FOR_PLAYERS,
@@ -11,8 +11,7 @@ export enum MatchState {
 
 export class Match {
   public id: string;
-  public player: Player;
-  public enemy!: Player;
+  public players: {[player_id: string]: Player} = {};  
   public state: MatchState;
 
   constructor(
@@ -21,14 +20,23 @@ export class Match {
     state: MatchState = MatchState.WAITING_FOR_PLAYERS
   ) {
     this.id = id;
+    this.players[createdBy.id] = createdBy;
     this.state = state;
-    this.player = createdBy;
   }
 
-  public addPlayer(player: Player) {
-    if (this.state == MatchState.WAITING_FOR_PLAYERS) {
-      this.enemy = player;
+  public addPlayer(p2: Player) {
+    console.log('TOP OF Match.addPlayer', this.state, this.players[p2.id], Object.keys(this.players).length < 2 );
+
+    if (
+      this.state == MatchState.WAITING_FOR_PLAYERS &&
+      !this.players[p2.id] && 
+      p2.state == PlayerState.NOT_IN_MATCH &&
+      Object.keys(this.players).length < 2
+      ) {
+      this.players[p2.id] = p2;
       this.state = MatchState.READY;
+    } else {
+      console.log('Match.addPlayer: invalid state', this.state, this.players[p2.id], Object.keys(this.players).length < 2);
     }
   }
 

@@ -29,8 +29,7 @@ class GameManager {
     return true;
   }
 
-  public createMatch(player_id: string): boolean {    
-    console.log("createMatch", player_id)
+  public createMatch(player_id: string): boolean {        
     if (!this._players[player_id]) return false;
     if (this._players[player_id].state != PlayerState.NOT_IN_MATCH) return false;
     
@@ -63,70 +62,67 @@ class GameManager {
     const data = matches.map((match) => {
       return {
         id: match.id,
-        player: match.player.name,
-        enemy: match.enemy ? match.enemy.name : "Waiting for player",
+        players: match.players,        
         state: MatchState[match.state],
       };
     });
     return data;
   }
 
-  // returns opponent data from match
-  public getOpponentData(match_id: string, id: string) {    
+  // // returns opponent data from match
+  // public getOpponentData(match_id: string, id: string) {    
     
-    if (!this._matches[match_id]) return null;
-    if (!this._players[id]) return null;
+  //   if (!this._matches[match_id]) return null;
+  //   if (!this._players[id]) return null;
 
-    const match = this._matches[match_id];
-    const player = this._players[id];
+  //   const match = this._matches[match_id];
+  //   const player = this._players[id];
 
-    if (match.player.id == player.id) {
-      return match.enemy
-    }
-    else if (match.enemy && match.enemy.id == player.id) {
-      return match.player
-    }
+  //   if (match.player.id == player.id) {
+  //     return match.enemy
+  //   }
+  //   else if (match.enemy && match.enemy.id == player.id) {
+  //     return match.player
+  //   }
 
-    return null;    
+  //   return null;    
+  // }
+
+  public getMatchData(match_id: string) {
+    if (!this._matches[match_id]) return null;    
+    return this._matches[match_id] as Match;
   }
 
   public updatePlayer(match_id: string, p: Player): boolean {
     if (!this._matches[match_id]) return false;
     const match = this._matches[match_id];
-
-    if (match.player.id == p.id) {
-      match.player.x = p.x;
-      match.player.y = p.y;
-    }
-    else if (match.enemy && match.enemy.id == p.id) {
-      match.enemy.x = p.x;
-      match.enemy.y = p.y;
-    }
-    else {
-      return false;
-    }
+    
+    if (!match.players[p.id]) return false
+    match.players[p.id] = p;
 
     return true;
   }
 
-  public joinMatch(match_id: string, enemy_id: string): boolean {
-    if (
-      !this._matches[match_id] || // match doesn't exist
-      !this._players[enemy_id] // player doesnt exist
+  public joinMatch(match_id: string, player_id: string): boolean {
+  if (
+    !this._matches[match_id] || // match doesn't exist
+      !this._players[player_id] // player doesnt exist
     )
       return false;
 
     const match = this._matches[match_id];
-    const enemy = this._players[enemy_id];
+    const p = this._players[player_id];
 
     if (
       match.state != MatchState.WAITING_FOR_PLAYERS || // match is not waiting for players
-      enemy.state != PlayerState.NOT_IN_MATCH // player is already in a match
+      p.state != PlayerState.NOT_IN_MATCH // player is already in a match
     )
       return false;
 
-    match.addPlayer(enemy);
+    match.addPlayer(p);
     match.state = MatchState.READY;
+    console.log('joinMatch', this._matches[match_id].players);
+    console.log('joinMatch', this._matches[match_id].players);
 
     return true;
   }

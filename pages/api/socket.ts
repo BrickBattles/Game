@@ -31,8 +31,7 @@ const SocketHandler = (req: any, res: any) => {
       });
 
       socket.on("create_match", () => {        
-        if(manager.createMatch(socket.id)) {
-          
+        if(manager.createMatch(socket.id)) {          
           io.sockets.in('/').emit("update_match_table", manager.getMatchDataForTable());
           socket.emit("update_match_table", manager.getMatchDataForTable());
         }else {
@@ -40,19 +39,35 @@ const SocketHandler = (req: any, res: any) => {
         }
       });
 
+      socket.on("get_match_data", (match_id: string) => {
+        socket.emit("update_match_data", manager.getMatchData(match_id))
+      });
+      
+
       socket.on("req_update_game", (match_id: string, p: Player) => {
-        manager.updatePlayer(match_id, p);        
-        socket.emit('res_update_game', manager.getOpponentData(match_id, p.id));
-        console.log('res_update_game', manager.getOpponentData(match_id, p.id));
+        console.log(p)
+        manager.updatePlayer(match_id, p);
+        socket.emit('res_update_game', manager.getMatchData(match_id));        
       });
 
       socket.on("join_match", (match_id: string) => {
+        
         if (manager.joinMatch(match_id, socket.id)) {          
-          let other_player = manager.getMatchById(match_id).player;
+          let players = manager.getMatchById(match_id);
+          let other_player = Object.values(players.players).find(p => p.id != socket.id);
+          
+          if (!other_player) {
+            console.log('join match failed couldnt find other player')
+            console.log(`players: ${players.players}`)
+            return
+          };
           io.sockets.sockets.get(other_player.id)?.join(match_id);          
           io.sockets.sockets.get(socket.id)?.join(match_id)
           io.to(match_id).emit("start_match", match_id);
-        }                       
+        }
+        else {
+          console.log('join match failed')
+        }
       });
 
     });

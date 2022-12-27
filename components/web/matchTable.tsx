@@ -29,7 +29,7 @@ const MatchTable: NextPage<{data: any, join: Function}> = ({
                 <tr>
                   <td>{match.id}</td>
                   <td>                    
-                    {`${match.player} vs ${ (match.enemy) ? match.enemy : 'Waiting' }`}
+                    Waiting
                   </td>
                   <td>{MatchState[match.state]}</td>
                   <td>100ETH</td>

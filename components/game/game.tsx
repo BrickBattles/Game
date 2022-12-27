@@ -45,7 +45,8 @@ const Game: NextPage<{matchID:string, socket: Socket}> = (
         
       });
       
-      PhaserGame.registry.set("matchID", matchID.matchID);
+      PhaserGame.registry.set("match_id", matchID.matchID);
+      PhaserGame.registry.set("socket", matchID.socket);
       // PhaserGame.scene.start("Preloader", {matchID: matchID.matchID, socket: socket.socket});      
     }
 

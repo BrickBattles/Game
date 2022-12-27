@@ -3,6 +3,7 @@ import brick from "../sprites/bricks/brick";
 import gun from "../sprites/guns/guns";
 import { Socket } from "socket.io-client";
 import { Player } from "../../../classes/player";
+import { Match } from "../../../classes/match";
 export default class MainScene extends Scene {
   player_sprite: any;
   enemy_sprite: any;
@@ -14,23 +15,31 @@ export default class MainScene extends Scene {
   match_id: any;
 
   constructor() {
-    super("mainscene");
-
-    // let x = new brick(this, 0, 0, "brick");
-    // this.player_sprite = new brick(this, 0, 0, "brick");
-    // this.enemy_sprite = new brick(this, 0, 0, "brick");
-
-    // this.socket = this.registry.get("socket");
-    // this.match_id = this.registry.get("match_id");
+    super("mainscene");    
   }
-  init(){
-    this.player = this.registry.get("player");
+
+  init(){    
+    this.match_id = this.registry.get("match_id");
     this.socket = this.registry.get("socket");
+
+    this.player_sprite = new brick(this, 250, 250, "brick");
+    this.enemy_sprite = new brick(this, 450, 250, "brick");
+
+    this.socket.emit("get_match_data", this.match_id);
+    this.socket.on("update_match_data", (match: Match) => {    
+      console.log(match.players)  
+      this.player = match.players[this.socket.id];
+      let other_player = Object.values(match.players).find(p => p.id != this.player.id);
+      if(other_player) {
+        this.enemy = other_player;
+      }
+    });
+
   }
 
   preload() {}
 
-  create() {
+  create() {    
     let { width, height } = this.sys.game.canvas;
 
     // set background
@@ -39,31 +48,11 @@ export default class MainScene extends Scene {
     background.displayHeight = height;
 
     // raise bottom collider
-    this.physics.world.setBounds(
-      0,
-      0,
-      width,
-      height * 0.75,
-      true,
-      true,
-      true,
-      true
-    );
+    this.physics.world.setBounds(0,0,width,height * 0.75,true,true,true,true);
     
-    this.player_sprite = new brick(this, 250, 250, "brick");
-    this.enemy_sprite = new brick(this, 250, 250, "brick");
-    
-    //     this.socket.on("res_update_game", (updated_enemy: Player) => {
-    //     this.enemy = updated_enemy;
-    //   });
   }
 
   update() {
-    // Update enemy
-    // this.enemy_sprite.setPosition(this.enemy.x, this.enemy.y);
-
-    // this.registry
-    //   .get("socket")
-    //   .emit("req_update_game", this.registry.get("player_id"));
+    
   }
 }

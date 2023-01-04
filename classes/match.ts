@@ -24,9 +24,7 @@ export class Match {
     this.state = state;
   }
 
-  public addPlayer(p2: Player) {
-    console.log('TOP OF Match.addPlayer', this.state, this.players[p2.id], Object.keys(this.players).length < 2 );
-
+  public addPlayer(p2: Player) {    
     if (
       this.state == MatchState.WAITING_FOR_PLAYERS &&
       !this.players[p2.id] && 

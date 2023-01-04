@@ -1,19 +1,19 @@
 import 'phaser';
 import gun from '../guns/guns';
-
 class brick extends Phaser.Physics.Arcade.Sprite {
     
     brickGun: gun ;
     
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, controls: boolean=false) {
         super(scene, x, y, texture);
         
         this.scaleX = 0.8;
         this.scaleY = 0.4;
-
         // add controls
-        this.controls();
-        
+        if (controls) {
+            this.controls();
+        }
+
         this.brickGun = new gun(this.scene, 0 , 0, 'uzi');    
 
         this.setDepth(1);
@@ -23,7 +23,6 @@ class brick extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
     }
     
-
     controls() {
         
         // const UP = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);

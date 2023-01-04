@@ -19,7 +19,7 @@ class GameManager {
     return this._matches;
   }
 
-  public get players() {
+  public get players() {1
     return this._players;
   }
 
@@ -121,8 +121,6 @@ class GameManager {
 
     match.addPlayer(p);
     match.state = MatchState.READY;
-    console.log('joinMatch', this._matches[match_id].players);
-    console.log('joinMatch', this._matches[match_id].players);
 
     return true;
   }

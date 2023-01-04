@@ -46,7 +46,6 @@ const SocketHandler = (req: any, res: any) => {
       socket.on("req_update_game", (match_id: string, p: Player) => {
         if (match_id && p) {
           manager.updatePlayer(match_id, p);
-          console.log(match_id);
           socket.emit("res_update_game", manager.getMatchData(match_id));
         }
       });

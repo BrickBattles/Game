@@ -62,10 +62,13 @@ export default class MainScene extends Scene {
       true,
       true
     );
+    
+    this.player.x = this.player_sprite.x;
+    this.player.y = this.player_sprite.y;
 
     this.socket.on("res_update_game", (match: Match) => {
       if (match) {
-        console.log(`res update game ${match.players}`);
+        console.log(`res update game ${JSON.stringify(match.players)}`);
         this.enemy = match.players[this.enemy.id];
         this.enemy_sprite.x = this.enemy.x;
         this.enemy_sprite.y = this.enemy.y;
@@ -80,8 +83,7 @@ export default class MainScene extends Scene {
     ) {
       this.player.x = this.player_sprite.x;
       this.player.y = this.player_sprite.y;
-
-      this.socket.emit("req_update_game", (this.match_id, this.player));
+      this.socket.emit("req_update_game", this.match_id, this.player);
     }
   }
 }

@@ -47,6 +47,18 @@ const SocketHandler = (req: any, res: any) => {
         if (match_id && p) {
           manager.updatePlayer(match_id, p);
           socket.emit("res_update_game", manager.getMatchData(match_id));
+
+          let players = manager.getMatchById(match_id);
+          let other_player = Object.values(players.players).find(
+            (p) => p.id != socket.id
+          );
+
+          if (!other_player) {
+            console.log("update game failed couldnt find other player");
+            console.log(`players: ${players.players}`);
+            return;
+          }
+          io.sockets.sockets.get(other_player.id)?.emit("res_update_game", manager.getMatchData(match_id));
         }
       });
 

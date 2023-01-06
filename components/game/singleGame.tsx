@@ -5,10 +5,7 @@ import {Game as GameType} from "phaser";
 import { NextPage } from "next";
 import { Socket } from "socket.io-client";
 
-const Game: NextPage<{matchID:string, socket: Socket}> = (
-  matchID,
-  socket
-) => {
+const Game: NextPage = () => {
   
   useEffect(() => {
     async function initPhaser() {
@@ -16,7 +13,7 @@ const Game: NextPage<{matchID:string, socket: Socket}> = (
       const Phaser = await import("phaser");
       
       const { default: Preloader } = await import("./scenes/Preloader");
-      const { default: MainScene } = await import("./scenes/MainScene");
+      const { default: DebugScene } = await import("./scenes/DevScene");
 
       const PhaserGame = new Phaser.Game({
         type: Phaser.AUTO,
@@ -34,7 +31,7 @@ const Game: NextPage<{matchID:string, socket: Socket}> = (
         },
         scene: [
             Preloader, 
-            MainScene
+            DebugScene
         ],
         scale: {
           mode: Phaser.Scale.FIT,
@@ -44,10 +41,7 @@ const Game: NextPage<{matchID:string, socket: Socket}> = (
         },
         
       });
-      
-      PhaserGame.registry.set("match_id", matchID.matchID);
-      PhaserGame.registry.set("socket", socket);
-      // PhaserGame.scene.start("Preloader", {matchID: matchID.matchID, socket: socket.socket});      
+            
     }
 
     initPhaser();

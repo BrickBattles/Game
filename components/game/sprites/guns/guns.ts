@@ -35,16 +35,12 @@ class BulletGroup extends Phaser.Physics.Arcade.Group {
     });
   }
 
-  fireBullet(x: number, y: number, v: number, direction: boolean) {
+  fireBullet(x: number, y: number, v: number) {
     const bullet = this.getFirstDead(false);
 
     if (bullet) {
       bullet.body.allowGravity = false;
       bullet.body.immovable = true;
-      if (direction) { 
-        bullet.flipX = true;
-        v = -v;
-      }
       bullet.fire(x, y, v);
     }
   }
@@ -56,7 +52,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
   shoot: boolean;
   cooldown: number;  // controls rate of fire
   prevShot: number;
-  bulletSpeed: number; // controls speed of bullet
+  v: number; // controls speed of bullet
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
@@ -72,9 +68,8 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
     this.shoot = false;
     this.cooldown = 100;
     this.prevShot = 0;
-
-    this.direction = true;
-    this.bulletSpeed = 500;
+    
+    this.v = 500;
   }
 
   controls() {
@@ -106,7 +101,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
     
       if (this.shoot && this.scene.time.now - this.prevShot > this.cooldown) {
         this.prevShot = this.scene.time.now;
-        this.bullets.fireBullet(this.x, this.y, this.bulletSpeed, this.direction);
+        this.bullets.fireBullet(this.x, this.y, (this.flipX) ? this.v : -this.v);
       }
     
   }

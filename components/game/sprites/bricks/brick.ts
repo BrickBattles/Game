@@ -15,6 +15,7 @@ class brick extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.brickGun = new gun(this.scene, this.x , this.y, 'uzi');    
+        this.brickGun.flipX = true;
 
         this.setDepth(1);
 
@@ -31,14 +32,14 @@ class brick extends Phaser.Physics.Arcade.Sprite {
         const RIGHT = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
         LEFT.on('down', () => { 
-            this.setVelocityX(-100); 
-            this.flip()
+            this.setVelocityX(-100);                         
+            this.brickGun.flipX = false;
         });
         LEFT.on('up', () => { this.setVelocityX(0); });
 
         RIGHT.on('down', () => { 
             this.setVelocityX(100); 
-            this.flip()
+            this.brickGun.flipX = true;
 
         });
         RIGHT.on('up', () => { this.setVelocityX(0); });
@@ -46,10 +47,6 @@ class brick extends Phaser.Physics.Arcade.Sprite {
         // DOWN.on('down', () => { this.setVelocityY(100); });
     }
 
-    flip() {
-        this.brickGun.flipX = !this.brickGun.flipX;
-        this.brickGun.direction = !this.brickGun.direction;
-    }
     
     update() {
         this.brickGun.update();

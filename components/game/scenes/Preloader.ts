@@ -13,6 +13,8 @@ export default class Preloader extends Scene {
         this.load.spritesheet('uzi', 'guns/Spritesheets/uzi.png', 
             {frameWidth: 60, frameHeight: 40});
 
+        this.load.image('bullet', 'guns/bullet_right.png');
+
     }
     
     create() {

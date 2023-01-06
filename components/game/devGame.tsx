@@ -16,8 +16,8 @@ const Game: NextPage = () => {
       const { default: DebugScene } = await import("./scenes/DevScene");
 
       const PhaserGame = new Phaser.Game({
-        type: Phaser.AUTO,
-        width: 1000,
+      type: Phaser.AUTO,
+      width: 1000,
         height: 500,
         backgroundColor: "#ffffff",
         parent: "game-content",
@@ -41,8 +41,9 @@ const Game: NextPage = () => {
         },
         
       });
-            
+      PhaserGame.scene.start("Preloader"); 
     }
+    
 
     initPhaser();
   }, []);

@@ -3,6 +3,7 @@ import gun from '../guns/guns';
 class brick extends Phaser.Physics.Arcade.Sprite {
     
     brickGun: gun ;
+    health: number = 100;
     
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string, controls: boolean=false) {
         super(scene, x, y, texture);

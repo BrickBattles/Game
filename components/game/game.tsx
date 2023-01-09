@@ -1,66 +1,43 @@
+import React, { useEffect, useState } from 'react';
+import { useChannel } from '../util/AblyReactEffect';
+import { Types } from 'ably';
+import { NextPage } from 'next';
+import GameConfig from '../util/GameConfig';
+import EventsCenter from '../util/EventsCenter';
 
-import { useEffect, useState} from "react";
-import {Game as GameType} from "phaser";
+const Game: NextPage<{ id: string }> = (id) => {
+  // const ChannelName = `Match:${id}`;
+  const ChannelName = `Match`;
 
-import { NextPage } from "next";
-import { Socket } from "socket.io-client";
+  const [messageText, setMessageText] = useState('');
+  const [receivedMessages, setMessages] = useState<Types.Message[]>([]);
+  const messageTextIsEmpty = messageText.trim().length === 0;
 
-const Game: NextPage<{matchID:string, socket: Socket}> = (
-  matchID,
-  socket
-) => {
-  
+  const [channel, ably]: any = useChannel(ChannelName, (message: Types.Message) => {
+    console.log(`Received message: ${message.data} (name: ${message.name})`);
+    EventsCenter.emit('sprite', message.data);
+  });
+
+  const sendMatchData = (message_text: string) => {
+    channel.publish({ name: ChannelName, data: message_text });
+  };
+
   useEffect(() => {
     async function initPhaser() {
-
-      const Phaser = await import("phaser");
-      
-      const { default: Preloader } = await import("./scenes/Preloader");
-      const { default: MainScene } = await import("./scenes/MainScene");
-
-      const PhaserGame = new Phaser.Game({
-        type: Phaser.AUTO,
-        width: 1000,
-        height: 500,
-        backgroundColor: "#ffffff",
-        parent: "game-content",
-        pixelArt: true,
-        physics: { 
-          default: "arcade",
-          arcade: {
-            gravity: { y: 200 },
-            debug: true
-          }
-        },
-        scene: [
-            Preloader, 
-            MainScene
-        ],
-        scale: {
-          mode: Phaser.Scale.FIT,
-          autoCenter: Phaser.Scale.CENTER_BOTH,    
-          width: 700,
-          height: 400,
-        },
-        
-      });
-      
-      PhaserGame.registry.set("match_id", matchID.matchID);
-      PhaserGame.registry.set("socket", socket);
-      // PhaserGame.scene.start("Preloader", {matchID: matchID.matchID, socket: socket.socket});      
+      const Phaser = await import('phaser');
+      const PhaserGame = new Phaser.Game(GameConfig);
+      PhaserGame.registry.set('id', id);
     }
-
     initPhaser();
   }, []);
 
   return (
-    <>
-      <div id="game-content" key="game-content" className="block">
+    <div>
+      <div id='game-content' key='game-content' className='block'>
         {/* where the canvas will be rendered */}
       </div>
-
-    </>
-  )
+    </div>
+  );
 };
 
 export default Game;

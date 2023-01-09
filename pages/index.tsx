@@ -1,14 +1,11 @@
 import dynamic from 'next/dynamic';
 
-const AblyGame = dynamic(() => import('../components/game/AblyGame'), { ssr: false });
+const Game = dynamic(() => import('../components/game/game'), { ssr: false });
 
 export default function Home() {
-
   return (
     <div>
-        <AblyGame />
+      <Game id={'test_id'} />
     </div>
   );
-};
-
-
+}

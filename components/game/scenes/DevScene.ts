@@ -1,44 +1,30 @@
-import { Physics, Scene } from "phaser";
-import brick from "../sprites/bricks/brick";
-import gun from "../sprites/guns/guns";
-import { Socket } from "socket.io-client";
-import { Match } from "../../../classes/match";
+import { Scene } from 'phaser';
+import EventsCenter from '../../util/EventsCenter';
 export default class DevScene extends Scene {
   player_sprite: any;
 
   constructor() {
-    super("mainscene");
+    super('mainscene');
   }
 
-  init() {
-    console.log("main scene ------------");
-    this.player_sprite = new brick(this, 250, 250, "brick", true);
-  }
+  init() {}
 
   preload() {}
 
   create() {
-    let { width, height } = this.sys.game.canvas;
+    EventsCenter.on('sprite', (data: any) => {
+      console.log(`sprite event ${JSON.stringify(data)}`);
+      // this.matter.add.sprite(data.x, data.y, 'brick');
+      var ball = this.matter.add.image(
+        Phaser.Math.Between(32, 768),
+        -200,
+        'brick',
+        Phaser.Math.Between(0, 5)
+      );
+    });
 
-    // set background
-    // let background = this.add.image(0, 0, "background").setOrigin(0, 0);
-    // background.displayWidth = width;
-    // background.displayHeight = height;
-
-    // raise bottom collider
-    this.physics.world.setBounds(
-      0,
-      0,
-      width,
-      height * 0.75,
-      true,
-      true,
-      true,
-      true
-    );
+    fetch('/api/match/1');
   }
 
-  update() {
-    this.player_sprite.update();
-  }
+  update() {}
 }

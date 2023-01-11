@@ -16,6 +16,8 @@ export default class MainScene extends Scene {
   preload() {}
 
   create() {
+    // console.log(this.matter.world);
+
     EventsCenter.on('initialize', (data: any) => {
       console.log('here');
       this.player_sprite = new Brick({

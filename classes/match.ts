@@ -1,9 +1,18 @@
-import {Player, PlayerState} from "./player";
+export class Player {
+  public id: string;
+  public x: any;
+  public y: any;
 
-export enum MatchState {  
-  WAITING_FOR_PLAYERS,
-  READY,
-  LOADING,
+  constructor(id: string, x: number, y: number) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+  }
+}
+
+export enum MatchState {
+  NEW,
+  INIT,
   IN_PROGRESS,
   STOPPING,
   FINISHED,
@@ -11,31 +20,11 @@ export enum MatchState {
 
 export class Match {
   public id: string;
-  public players: {[player_id: string]: Player} = {};  
+  public players: { [player_id: string]: Player } = {};
   public state: MatchState;
 
-  constructor(
-    id: string,
-    createdBy: Player,
-    state: MatchState = MatchState.WAITING_FOR_PLAYERS
-  ) {
+  constructor({ id, state = MatchState.NEW }: { id: string; state?: MatchState }) {
     this.id = id;
-    this.players[createdBy.id] = createdBy;
     this.state = state;
   }
-
-  public addPlayer(p2: Player) {    
-    if (
-      this.state == MatchState.WAITING_FOR_PLAYERS &&
-      !this.players[p2.id] && 
-      p2.state == PlayerState.NOT_IN_MATCH &&
-      Object.keys(this.players).length < 2
-      ) {
-      this.players[p2.id] = p2;
-      this.state = MatchState.READY;
-    } else {
-      console.log('Match.addPlayer: invalid state', this.state, this.players[p2.id], Object.keys(this.players).length < 2);
-    }
-  }
-
 }

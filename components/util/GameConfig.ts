@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 
 import Preloader from '../game/scenes/Preloader';
-import DevScene from '../game/scenes/DevScene';
 import MainScene from '../game/scenes/MainScene';
 
 const GameConfig: Phaser.Types.Core.GameConfig = {
@@ -17,7 +16,7 @@ const GameConfig: Phaser.Types.Core.GameConfig = {
       debug: true,
     },
   },
-  scene: [Preloader, DevScene],
+  scene: [Preloader, MainScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

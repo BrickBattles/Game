@@ -2,21 +2,29 @@ import Ably from 'ably/promises';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const id = req.query.id;
   const client = new Ably.Realtime(process.env.ABLY_API_KEY!);
-  //   const channelName = `Match:${req.body.id}`;
-  //   const channel = client.channels.get(channelName);
-  const channel = client.channels.get('Match');
+  const channel = client.channels.get(`Match:${id}`);
 
   channel.subscribe((message) => {
-    console.log(`message: ${JSON.stringify(message)}`);
+    if (message.name == 'initialize') {
+      console.log(message.data);
+    }
   });
+
   channel.publish(
-    'sprite',
+    'initialize',
     JSON.stringify({
-      x: 200,
-      y: 200,
+      player_one: {
+        x: 200,
+        y: 200,
+      },
+      player_two: {
+        x: 400,
+        y: 200,
+      },
     })
   );
-  console.log('here');
+
   res.status(200).json('');
 };

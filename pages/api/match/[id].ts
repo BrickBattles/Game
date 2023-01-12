@@ -3,13 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import MatchController from './matchController';
 
 let matchController: MatchController;
-let client: Ably.Realtime;
 
 let setup = () => {
-  if (!client || !client.connection) {
-    client = new Ably.Realtime(process.env.ABLY_API_KEY!);
-  }
-
   if (!matchController) {
     matchController = MatchController.Instance;
   }
@@ -18,6 +13,7 @@ let setup = () => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   setup();
 
+  const client = new Ably.Realtime(process.env.ABLY_API_KEY!);
   const id = req.query.id;
 
   const match = matchController.getMatch(id as string);

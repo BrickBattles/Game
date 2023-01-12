@@ -11,6 +11,7 @@ const Game: NextPage<{ id: string }> = ({ id }) => {
   const [channel, ably]: any = useChannel(ChannelName, (message: Types.Message) => {
     console.log(`Received message: ${message.data} (name: ${message.name})`);
     if (message.name === 'initialize') {
+      console.log(`Received message: ${message.data} (name: ${message.name})`);
       EventsCenter.emit('initialize', message.data);
     }
   });

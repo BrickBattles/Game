@@ -27,6 +27,7 @@ class Brick extends Phaser.Physics.Matter.Sprite {
     if (controls) this.controls();
 
     scene.add.existing(this);
+    console.log('new brick');
   }
 
   controls() {

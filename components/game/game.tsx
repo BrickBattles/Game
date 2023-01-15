@@ -4,6 +4,7 @@ import { Types } from 'ably';
 import { NextPage } from 'next';
 import GameConfig from '../util/GameConfig';
 import EventsCenter from '../util/EventsCenter';
+import { Match } from '../../classes/match';
 
 const Game: NextPage<{ id: string }> = ({ id }) => {
   const ChannelName = `Match:${id}`;

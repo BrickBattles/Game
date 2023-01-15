@@ -34,19 +34,21 @@ export class Match {
   }
 
   public toJSON() {
-    let player_arr = [];
+    let playerJSON: { [id: string]: any } = {};
     for (let key in this.players) {
-      player_arr.push({
-        id: key,
-        x: this.players[key].position.x,
-        y: this.players[key].position.y,
-      });
+      let p = this.players[key];
+      let t = {
+        position: {
+          x: p.position.x,
+          y: p.position.y,
+        },
+      };
+      playerJSON[key] = t;
     }
-
     return {
-      match_id: this.id,
+      id: this.id,
+      players: playerJSON,
       state: this.state,
-      players: player_arr,
     };
   }
 }
@@ -67,9 +69,5 @@ export class MatchStorage {
 
   public removeMatch(id: string) {
     delete this.matches[id];
-  }
-
-  public toJSON() {
-    return Object.values(this.matches);
   }
 }

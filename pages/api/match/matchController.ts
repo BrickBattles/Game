@@ -17,16 +17,18 @@ class MatchController {
   public getMatch(id: string): Match {
     if (!this.matchStorage.hasMatch(id)) {
       this.matchStorage.addMatch(new Match({ id }));
-      let m = this.matchStorage.getMatch(id);
-
-      m.addPlayer({ id: 'player1' });
-      m.addPlayer({ id: 'player2' });
     }
     return this.matchStorage.getMatch(id);
   }
 
-  public initMatch(id: string, player_id: string, enemy_id: string) {
-    const match = this.getMatch(id);
+  public initMatch(id: string, player_id: string, enemy_id: string): Match {
+    const m = this.getMatch(id);
+
+    m.addPlayer({ id: 'player1' });
+    m.addPlayer({ id: 'player2' });
+
+    this.matchStorage.matches[id] = m;
+    return m;
   }
 }
 

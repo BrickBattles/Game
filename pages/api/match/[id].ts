@@ -1,6 +1,7 @@
 import Ably from 'ably/promises';
 import { NextApiRequest, NextApiResponse } from 'next';
 import MatchController from './matchController';
+import * as util from 'util';
 
 let matchController: MatchController;
 
@@ -16,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const client = new Ably.Realtime(process.env.ABLY_API_KEY!);
   const id = req.query.id;
 
-  const match = matchController.getMatch(id as string);
+  const match = matchController.initMatch(id as string, 'player1', 'player2');
 
   const channel = client.channels.get(`Match:${id}`);
 
@@ -26,9 +27,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   });
 
-  console.log(match.toJSON());
-  // channel.publish('initialize', JSON.stringify(match.toJSON()));
-  channel.publish('initialize', 'hello');
-
+  channel.publish('initialize', JSON.stringify(match.toJSON()));
   res.status(200).json('');
 };

@@ -4,13 +4,10 @@ import Brick from '../game/sprites/brick';
 import { Match } from '../../classes/match';
 import * as matter from 'matter-js';
 
-const matchLoader = (scene: Scene, match: Match) => {
-  console.log(`loader: ${match}`);
+const matchLoader = (scene: Scene, data: any) => {
+  let match = JSON.parse(data);
   for (let key in match.players) {
-    console.log(`key: ${key}`);
-  }
-  for (const [player_id, body] of Object.entries(match.players)) {
-    console.log(`player: ${player_id}`);
+    const body = match.players[key];
     new Brick({
       scene: scene,
       x: body.position.x,

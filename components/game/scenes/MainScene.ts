@@ -22,7 +22,7 @@ export default class MainScene extends Scene {
 
     EventsCenter.on('initialize', (data: any) => {
       console.log(`initialize: ${data}`);
-      // matchLoader(this, match);
+      matchLoader(this, data);
       // for (let key in match.players) {
       //   console.log(`key: ${key}`);
       // }

@@ -8,6 +8,7 @@ import { Match } from '../../classes/match';
 
 const Game: NextPage<{ id: string }> = ({ id }) => {
   const ChannelName = `Match:${id}`;
+  const [clientId, setClientId] = useState('');
 
   const [channel, ably]: any = useChannel(ChannelName, (message: Types.Message) => {
     console.log(`Received message: ${message.data} (name: ${message.name})`);
@@ -26,7 +27,9 @@ const Game: NextPage<{ id: string }> = ({ id }) => {
       const Phaser = await import('phaser');
       const PhaserGame = new Phaser.Game(GameConfig);
       PhaserGame.registry.set('id', id);
+      PhaserGame.registry.set('clientId', ably.auth.clientId);
     }
+
     initPhaser();
   }, []);
 

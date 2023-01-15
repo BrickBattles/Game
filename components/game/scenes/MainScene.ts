@@ -6,6 +6,7 @@ import matchLoader from '../../util/MatchLoader';
 export default class MainScene extends Scene {
   player_sprite: Brick;
   id: string;
+  clientId: string;
 
   constructor() {
     super('mainscene');
@@ -13,6 +14,8 @@ export default class MainScene extends Scene {
 
   init() {
     this.id = this.registry.get('id');
+    this.clientId = this.registry.get('clientId');
+    console.log(this.id, this.clientId);
   }
 
   preload() {}
@@ -21,20 +24,7 @@ export default class MainScene extends Scene {
     // console.log(this.matter.world);
 
     EventsCenter.on('initialize', (data: any) => {
-      console.log(`initialize: ${data}`);
-      matchLoader(this, data);
-      // for (let key in match.players) {
-      //   console.log(`key: ${key}`);
-      // }
-
-      // for (const [player_id, body] of Object.entries(match.players)) {
-      //   console.log(`player: ${player_id}`);
-      //   new Brick({
-      //     scene: this,
-      //     x: body.position.x,
-      //     y: body.position.y,
-      //   });
-      // }
+      matchLoader(this, data, this.clientId);
     });
 
     // worl settings

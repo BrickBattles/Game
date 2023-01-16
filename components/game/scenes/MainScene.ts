@@ -37,6 +37,7 @@ export default class MainScene extends Scene {
     fetch(`/api/match/${this.id}`);
 
     this.input.keyboard.on('keydown', () => {
+      SaveMatch(this, this.match);
       EventsCenter.emit('update_match', this.match);
     });
   }

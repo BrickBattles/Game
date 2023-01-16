@@ -4,7 +4,7 @@ import { Types } from 'ably';
 import { NextPage } from 'next';
 import GameConfig from '../util/GameConfig';
 import EventsCenter from '../util/EventsCenter';
-import { Match } from '../../classes/match';
+import { MatchData } from '../../classes/matchData';
 import { configureAbly, useChannel } from '@ably-labs/react-hooks';
 
 import Ably from 'ably/promises';
@@ -33,7 +33,7 @@ const Game: NextPage<{ id: string }> = ({ id }) => {
         }
       });
 
-      EventsCenter.on('update_match', (match: Match) => {
+      EventsCenter.on('update_match', (match: MatchData) => {
         channel.publish('update_match', match);
       });
 

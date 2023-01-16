@@ -4,6 +4,7 @@ import EventsCenter from '../../util/EventsCenter';
 class Brick extends Phaser.Physics.Matter.Sprite {
   brickGun: gun;
   health: number = 100;
+  id: string;
 
   constructor({
     scene,
@@ -13,6 +14,7 @@ class Brick extends Phaser.Physics.Matter.Sprite {
     frame,
     options,
     controls = false,
+    id,
   }: {
     scene: Phaser.Scene;
     x: number;
@@ -21,8 +23,11 @@ class Brick extends Phaser.Physics.Matter.Sprite {
     frame?: string;
     options?: any;
     controls?: boolean;
+    id: string;
   }) {
     super(scene.matter.world, x, y, texture, frame, options);
+
+    this.id = id;
 
     if (controls) this.controls();
 

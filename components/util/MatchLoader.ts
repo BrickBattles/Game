@@ -16,10 +16,24 @@ const LoadMatch = (scene: Scene, data: any, client_id: string) => {
       x: player.position.x,
       y: player.position.y,
       controls: player.id === client_id,
+      id: player.id,
     });
   }
 };
 
-const SaveMatch = (scene: Scene, match_ref: MatchData) => {};
+const SaveMatch = (scene: Scene, match_ref: MatchData) => {
+  let players: any = {};
+
+  scene.children.each((child: any) => {
+    if (child instanceof Brick) {
+      players[child.id] = {
+        id: child.id,
+        position: child.body.position,
+      };
+    }
+  });
+
+  match_ref.players = players;
+};
 
 export { LoadMatch, SaveMatch };

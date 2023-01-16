@@ -33,6 +33,10 @@ const Game: NextPage<{ id: string }> = ({ id }) => {
         }
       });
 
+      EventsCenter.on('update_match', (match: Match) => {
+        channel.publish('update_match', match);
+      });
+
       const Phaser = await import('phaser');
       const PhaserGame = new Phaser.Game(GameConfig);
       PhaserGame.registry.set('id', id);

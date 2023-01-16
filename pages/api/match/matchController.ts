@@ -1,10 +1,10 @@
 import * as matter from 'matter-js';
-import { Match, MatchStorage } from '../../../classes/match';
+import { MatchData, MatchDataStorage, PlayerData } from '../../../classes/matchData';
 
 class MatchController {
   private static _instance: MatchController;
 
-  matchStorage: MatchStorage = new MatchStorage();
+  storage: MatchDataStorage = new MatchDataStorage();
 
   private constructor() {
     // matter.Engine.create();
@@ -14,20 +14,20 @@ class MatchController {
     return this._instance || (this._instance = new this());
   }
 
-  public getMatch(id: string): Match {
-    if (!this.matchStorage.hasMatch(id)) {
-      this.matchStorage.addMatch(new Match({ id }));
+  public getMatch(id: string): MatchData {
+    if (!this.storage.hasMatch(id)) {
+      this.storage.addMatch(new MatchData(id));
     }
-    return this.matchStorage.getMatch(id);
+    return this.storage.getMatch(id);
   }
 
-  public initMatch(id: string, player_id: string, enemy_id: string): Match {
+  public initMatch(id: string, player_id: string, enemy_id: string): MatchData {
     const m = this.getMatch(id);
 
-    m.addPlayer({ id: player_id });
-    m.addPlayer({ id: enemy_id });
+    m.addPlayer(new PlayerData(player_id));
+    m.addPlayer(new PlayerData(enemy_id));
 
-    this.matchStorage.matches[id] = m;
+    this.storage.matches[id] = m;
     return m;
   }
 }

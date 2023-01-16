@@ -49,6 +49,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   });
 
-  channel.publish('initialize', JSON.stringify(match.toJSON()));
+  channel.publish('initialize', JSON.stringify(match));
   res.status(200).json('');
 };

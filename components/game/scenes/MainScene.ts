@@ -1,12 +1,14 @@
 import { Scene } from 'phaser';
 import EventsCenter from '../../util/EventsCenter';
 import Brick from '../sprites/brick';
-import { Match } from '../../../classes/match';
-import matchLoader from '../../util/MatchLoader';
+import { MatchData } from '../../../classes/matchData';
+import { SaveMatch, LoadMatch } from '../../util/MatchLoader';
 export default class MainScene extends Scene {
   player_sprite: Brick;
   id: string;
   clientId: string;
+
+  match: MatchData;
 
   constructor() {
     super('mainscene');
@@ -15,6 +17,7 @@ export default class MainScene extends Scene {
   init() {
     this.id = this.registry.get('id');
     this.clientId = this.registry.get('clientId');
+    this.match = new MatchData(this.id);
   }
 
   preload() {}
@@ -23,7 +26,7 @@ export default class MainScene extends Scene {
     // console.log(this.matter.world);
 
     EventsCenter.on('initialize', (data: any) => {
-      matchLoader(this, data, this.clientId);
+      LoadMatch(this, data, this.clientId);
     });
 
     // worl settings
@@ -32,6 +35,10 @@ export default class MainScene extends Scene {
 
     // tell server to start game
     fetch(`/api/match/${this.id}`);
+
+    this.input.keyboard.on('keydown', () => {
+      EventsCenter.emit('update_match', this.match);
+    });
   }
 
   update() {}

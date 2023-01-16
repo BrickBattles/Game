@@ -1,36 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { useChannel } from '../util/AblyReactEffect';
+
 import { Types } from 'ably';
 import { NextPage } from 'next';
 import GameConfig from '../util/GameConfig';
 import EventsCenter from '../util/EventsCenter';
 import { Match } from '../../classes/match';
+import { configureAbly, useChannel } from '@ably-labs/react-hooks';
+
+import Ably from 'ably/promises';
 
 const Game: NextPage<{ id: string }> = ({ id }) => {
   const ChannelName = `Match:${id}`;
   const [clientId, setClientId] = useState('');
+  const [ably, setAbly] = useState<Ably.Types.RealtimePromise | Ably.Realtime>(
+    new Ably.Realtime.Promise({ authUrl: 'api/createTokenRequest' })
+  );
 
-  const [channel, ably]: any = useChannel(ChannelName, (message: Types.Message) => {
-    console.log(`Received message: ${message.data} (name: ${message.name})`);
-    if (message.name === 'initialize') {
-      console.log(`Received message: ${message.data} (name: ${message.name})`);
-      EventsCenter.emit('initialize', message.data);
-    }
-  });
-
-  // const sendMatchData = (message_text: string) => {
-  //   channel.publish({ name: ChannelName, data: message_text });
-  // };
-
+  // start phaser game
   useEffect(() => {
-    async function initPhaser() {
+    async function init() {
+      await ably.connection.once('connected');
+      setClientId(`${ably.auth.clientId!}`);
+
+      const channel = ably.channels.get(ChannelName);
+
+      channel.attach();
+      channel.presence.enter();
+
+      channel.subscribe((message: Types.Message) => {
+        if (message.name === 'initialize') {
+          EventsCenter.emit('initialize', message.data);
+        }
+      });
+
       const Phaser = await import('phaser');
       const PhaserGame = new Phaser.Game(GameConfig);
       PhaserGame.registry.set('id', id);
-      PhaserGame.registry.set('clientId', ably.auth.clientId);
+      PhaserGame.registry.set('clientId', ably.auth.clientId!);
     }
-
-    initPhaser();
+    init();
   }, []);
 
   return (
@@ -40,7 +48,7 @@ const Game: NextPage<{ id: string }> = ({ id }) => {
       </div>
 
       <div className='text-center'>
-        <span>id: {id}</span>
+        <span>client: {clientId}</span>
         <br></br>
         <span>{ChannelName}</span>
       </div>

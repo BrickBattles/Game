@@ -15,7 +15,6 @@ export default class MainScene extends Scene {
   init() {
     this.id = this.registry.get('id');
     this.clientId = this.registry.get('clientId');
-    console.log(this.id, this.clientId);
   }
 
   preload() {}

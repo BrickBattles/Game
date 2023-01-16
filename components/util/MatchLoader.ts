@@ -8,6 +8,7 @@ const matchLoader = (scene: Scene, data: any, client_id: string) => {
   let match = JSON.parse(data);
   for (let key in match.players) {
     const body = match.players[key];
+    console.log(key);
     new Brick({
       scene: scene,
       x: body.position.x,

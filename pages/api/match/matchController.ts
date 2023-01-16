@@ -24,8 +24,8 @@ class MatchController {
   public initMatch(id: string, player_id: string, enemy_id: string): Match {
     const m = this.getMatch(id);
 
-    m.addPlayer({ id: 'player1' });
-    m.addPlayer({ id: 'player2' });
+    m.addPlayer({ id: player_id });
+    m.addPlayer({ id: enemy_id });
 
     this.matchStorage.matches[id] = m;
     return m;

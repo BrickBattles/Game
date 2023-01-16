@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ably-labs/react-hooks": "^2.0.11",
     "@types/matter-js": "^0.18.2",
     "ably": "^1.2.5-beta.1",
     "daisyui": "^2.46.0",

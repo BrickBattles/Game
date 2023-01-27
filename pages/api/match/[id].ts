@@ -42,6 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const match = matchController.initMatch(`${id}`, player_ids[0], player_ids[1]);
+  const matchData = matchController.getMatchData(`${id}`);
 
   channel.subscribe((message) => {
     if (message.name == 'initialize') {
@@ -49,6 +50,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   });
 
-  channel.publish('initialize', JSON.stringify(match));
+  channel.publish('initialize', JSON.stringify(matchData));
   res.status(200).json('');
 };

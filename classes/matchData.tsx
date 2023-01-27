@@ -19,14 +19,14 @@ export class PlayerData {
 
 export class MatchData {
   public id: string;
-  public players: PlayerData[] = [];
+  public players: { [key: string]: PlayerData };
 
   constructor(id: string) {
     this.id = id;
   }
 
   public addPlayer(player: PlayerData) {
-    this.players.push(player);
+    this.players[player.id] = player;
   }
 }
 

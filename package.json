@@ -7,17 +7,23 @@
   },
   "dependencies": {
     "@ably-labs/react-hooks": "^2.0.11",
+    "@chakra-ui/react": "^2.4.9",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@rainbow-me/rainbowkit": "^0.8.1",
     "@types/matter-js": "^0.18.2",
-    "ably": "^1.2.5-beta.1",
+    "alchemy-sdk": "^2.4.0",
     "daisyui": "^2.46.0",
+    "ethers": "^5.7.2",
+    "framer-motion": "^8.5.4",
     "matter-js": "^0.18.0",
     "next": "latest",
     "phaser": "^3.55.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "socket.io": "^4.5.4",
-    "socket.io-client": "^4.5.4",
-    "uuid": "^9.0.0"
+    "streamr-client": "^7.3.0",
+    "uuid": "^9.0.0",
+    "wagmi": "^0.9.6"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

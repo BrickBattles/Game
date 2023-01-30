@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import MatchTable from '../components/web/matchTable';
 import Navbar from '../components/web/navbar';
 
 const Game = dynamic(() => import('../components/game/game'), { ssr: false });
@@ -11,7 +12,10 @@ export default function Home() {
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <h1 className='text-5xl font-bold'>Brick Battles</h1>
+            {/* <h1 className='text-5xl font-bold'>Brick Battles</h1> */}
+
+            <MatchTable />
+            {/* <Game /> */}
           </div>
         </div>
       </div>

@@ -14,10 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/util/AblyReactEffect.js", "components/util/AblyReactEffect.js"],
-  "exclude": ["node_modules"],  
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
   // "typeRoots": ["./node_modules/@types", "./customTypes"],
   // "types": ["states.ts", "game.ts"]
 }

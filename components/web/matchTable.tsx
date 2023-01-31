@@ -45,7 +45,6 @@ const MatchTable: NextPage = () => {
                   <button
                     className='btn btn-primary'
                     onClick={() => {
-                      setLoading(true);
                       fetch('http://localhost:3000/api/match/join/' + match.id);
                     }}
                   >

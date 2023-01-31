@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-
+import { AuthProvider } from '../components/web/auth';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
@@ -27,8 +27,10 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider chains={chains} coolMode>
+        {/* <AuthProvider> */}
         <Component {...pageProps} />
+        {/* </AuthProvider> */}
       </RainbowKitProvider>
     </WagmiConfig>
   );

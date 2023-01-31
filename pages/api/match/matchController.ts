@@ -4,25 +4,7 @@ import { NonceManager } from '@ethersproject/experimental';
 import { Database, getDefaultProvider } from '@tableland/sdk';
 import { Wallet } from 'ethers';
 
-enum MatchSate {
-  WAITING_FOR_PLAYERS,
-  IN_PROGRESS,
-  FINISHED,
-}
-
-class Match {
-  id: string;
-  streamId: string;
-  players: Map<string, string>;
-  state: MatchSate;
-
-  constructor(id: string, streamId: string) {
-    this.id = id;
-    this.streamId = streamId;
-    this.players = new Map();
-    this.state = MatchSate.WAITING_FOR_PLAYERS;
-  }
-}
+import { Match, MatchState } from '../../../classes/match';
 
 class MatchController {
   private static _instance: MatchController;
@@ -31,7 +13,10 @@ class MatchController {
 
   tableland: Database;
   tablePrefix: string = 'brick_battles';
-  tableName: string = 'brick_battles_137_77';
+  tableName: string = 'brick_battles_137_80';
+  tableSchemaTyped: string =
+    '(id integer primary key, streamId text, players int, state int, amount int)';
+  tableSchema: string = '(id, streamId, players, state, amount)';
 
   private constructor() {
     this.streamr = new StreamrClient({
@@ -57,9 +42,7 @@ class MatchController {
   public async createTable() {
     try {
       const { meta: create } = await this.tableland
-        .prepare(
-          `CREATE TABLE ${this.tablePrefix} (id integer primary key, streamId text, players int, state int);`
-        )
+        .prepare(`CREATE TABLE ${this.tablePrefix} ${this.tableSchemaTyped};`)
         .run();
       console.log(`created table: ${create.txn?.name}`);
       this.tableName = create.txn?.name!;
@@ -88,8 +71,8 @@ class MatchController {
     const match = new Match(matchId, stream.id);
 
     const { meta: insert } = await this.tableland
-      .prepare(`INSERT INTO ${this.tableName} (id, streamId, players, state) VALUES (?, ?, ?, ?);`)
-      .bind(match.id, match.streamId, match.players.size, match.state)
+      .prepare(`INSERT INTO ${this.tableName} ${this.tableSchema} VALUES (?, ?, ?, ?, ?);`)
+      .bind(match.id, match.streamId, match.players.size, match.state, match.amount)
       .run();
 
     await insert.wait;

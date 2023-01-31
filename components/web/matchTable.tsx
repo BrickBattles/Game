@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import { Match, MatchState } from '../../classes/match';
 
-// const MatchTable: NextPage<{ data: any; join: Function }> = ({ data, join }) => {
 const MatchTable: NextPage = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,31 +33,28 @@ const MatchTable: NextPage = () => {
               <th>Join</th>
             </tr>
           </thead>
-          <tbody>
-            {/* <!-- row 1 --> */}
-
-            {/* {Object.keys(data).map((key) => {
-              let match: any = data[key];
-              return (
-                <tr>
-                  <td>{match.id}</td>
-                  <td>Waiting</td>
-                  <td>{match.state}</td>
-                  <td>100ETH</td>
-                  <td>
-                    <button
-                      className='btn btn-primary'
-                      onClick={() => {
-                        join(match.id);
-                      }}
-                    >
-                      Join
-                    </button>
-                  </td>
-                </tr>
-              );
-            })} */}
-          </tbody>
+          <tbody>{/* <!-- row 1 --> */}</tbody>
+          {data.map((match: Match) => {
+            return (
+              <tr>
+                <td>{match.id}</td>
+                <td>{match.players}</td>
+                <td>{MatchState[match.state]}</td>
+                <td>{match.amount}</td>
+                <td>
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => {
+                      setLoading(true);
+                      fetch('http://localhost:3000/api/match/join/' + match.id);
+                    }}
+                  >
+                    Join
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </table>
       </div>
       <button

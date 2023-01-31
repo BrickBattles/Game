@@ -9,7 +9,10 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { polygon } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
+import {
+  RainbowKitSiweNextAuthProvider,
+  GetSiweMessageOptions,
+} from '@rainbow-me/rainbowkit-siwe-next-auth';
 
 const { chains, provider } = configureChains(
   [polygon],
@@ -27,11 +30,15 @@ const wagmiClient = createClient({
   provider,
 });
 
+const getSiweMessageOptions: GetSiweMessageOptions = () => ({
+  statement: 'Sign in to BrickBattles',
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <SessionProvider session={pageProps.session} refetchInterval={0}>
-        <RainbowKitSiweNextAuthProvider>
+        <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
           <RainbowKitProvider chains={chains} coolMode>
             <Component {...pageProps} />
           </RainbowKitProvider>

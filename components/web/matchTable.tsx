@@ -38,7 +38,7 @@ const MatchTable: NextPage = () => {
             return (
               <tr>
                 <td>{match.id}</td>
-                <td>{match.players}</td>
+                <td>{JSON.stringify(match.players)}</td>
                 <td>{MatchState[match.state]}</td>
                 <td>{match.amount}</td>
                 <td>

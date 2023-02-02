@@ -15,7 +15,7 @@ class MatchController {
   tablePrefix: string = 'brick_battles';
   tableName: string = 'brick_battles_137_80';
   tableSchemaTyped: string =
-    '(id integer primary key, streamId text, players int, state int, amount int)';
+    '(id integer primary key, streamId text, players text, state int, amount int)';
   tableSchema: string = '(id, streamId, players, state, amount)';
 
   private constructor() {
@@ -72,7 +72,7 @@ class MatchController {
 
     const { meta: insert } = await this.tableland
       .prepare(`INSERT INTO ${this.tableName} ${this.tableSchema} VALUES (?, ?, ?, ?, ?);`)
-      .bind(match.id, match.streamId, match.players.size, match.state, match.amount)
+      .bind(match.id, match.streamId, match.players, match.state, match.amount)
       .run();
 
     await insert.wait;
@@ -89,7 +89,7 @@ class MatchController {
 
   public async getAllStreams() {
     const data: { [key: string]: any } = {};
-    const streams = this.streamr.searchStreams('map', undefined);
+    const streams = this.streamr.searchStreams('match', undefined);
 
     for await (const stream of streams) {
       data[stream.id] = stream;

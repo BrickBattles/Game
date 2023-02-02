@@ -80,6 +80,13 @@ class MatchController {
     return stream.id;
   }
 
+  public async joinMatch(matchId: string, playerAddr: string) {
+    const match = await this.getMatch(matchId);
+    console.log(match);
+  }
+
+  public async leaveMatch(matchId: string, playerAddr: string) {}
+
   public async getAllStreams() {
     const data: { [key: string]: any } = {};
     const streams = this.streamr.searchStreams('map', undefined);

@@ -10,7 +10,7 @@ let setup = () => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   setup();
   // let matchId = uuidv4();
-  let matchId = '0';
+  let matchId = '123';
   let id = await matchController.createMatch(matchId);
   res.status(200).json({ streamId: id, matchId: matchId });
 };

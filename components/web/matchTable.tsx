@@ -33,27 +33,29 @@ const MatchTable: NextPage = () => {
               <th>Join</th>
             </tr>
           </thead>
-          <tbody>{/* <!-- row 1 --> */}</tbody>
-          {data.map((match: Match) => {
-            return (
-              <tr>
-                <td>{match.id}</td>
-                <td>{JSON.stringify(match.players)}</td>
-                <td>{MatchState[match.state]}</td>
-                <td>{match.amount}</td>
-                <td>
-                  <button
-                    className='btn btn-primary'
-                    onClick={() => {
-                      fetch('http://localhost:3000/api/match/join/' + match.id);
-                    }}
-                  >
-                    Join
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+          <tbody>
+            {Object.entries(data).map(([key, m]) => {
+              let match: Match = m;
+              return (
+                <tr>
+                  <td>{match.id}</td>
+                  <td>{JSON.stringify(match.players)}</td>
+                  <td>{MatchState[match.state]}</td>
+                  <td>{match.amount}</td>
+                  <td>
+                    <button
+                      className='btn btn-primary'
+                      onClick={() => {
+                        fetch('http://localhost:3000/api/match/join/' + match.id);
+                      }}
+                    >
+                      Join
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
       <button

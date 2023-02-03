@@ -1,5 +1,6 @@
 enum MatchState {
   WAITING_FOR_PLAYERS,
+  STARTING,
   IN_PROGRESS,
   FINISHED,
 }
@@ -7,16 +8,13 @@ enum MatchState {
 class Match {
   id: string;
   streamId: string;
-  players: {};
-  state: MatchState;
-  amount: number;
+  players: Set<string> = new Set();
+  state: MatchState = MatchState.WAITING_FOR_PLAYERS;
+  amount: number = 0;
 
   constructor(id: string, streamId: string) {
     this.id = id;
     this.streamId = streamId;
-    this.players = {};
-    this.state = MatchState.WAITING_FOR_PLAYERS;
-    this.amount = 0;
   }
 }
 

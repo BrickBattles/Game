@@ -9,6 +9,5 @@ let setup = () => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   setup();
   let data = await matchController.getTableData();
-  console.log(data);
   res.status(200).json(data);
 };

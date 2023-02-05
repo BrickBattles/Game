@@ -10,8 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { StreamrClient } from 'streamr-client';
 import { InjectedConnector } from '@wagmi/core';
 
-import axios, { Axios } from 'axios';
-
 const Game = dynamic(() => import('../components/game/game'), { ssr: false });
 
 enum AuthState {
@@ -63,8 +61,7 @@ function Home({ address, session }: { address: any; session: any }) {
         <div className='hero min-h-screen bg-base-200'>
           <div className='hero-content text-center'>
             <div className='max-w-md'>
-              <h1 className='text-5xl font-bold'>Brick Battles</h1>
-              {homeState === HomeState.MATCH_TABLE ? <MatchTable /> : <Game />};
+              {homeState === HomeState.MATCH_TABLE ? <MatchTable /> : <Game />}
             </div>
           </div>
         </div>
@@ -73,13 +70,11 @@ function Home({ address, session }: { address: any; session: any }) {
           <div className='hero-content text-center'>
             <div className='max-w-md'>
               <h1 className='text-5xl font-bold'>Brick Battles</h1>
-
               <h1>Please connect your wallet to continue</h1>
             </div>
           </div>
         </div>
       )}
-      ;
       <footer>
         {address ? <h1>Authenticated as {address}</h1> : <h1>Unauthenticated</h1>}
         {session ? <h1>Session: {JSON.stringify(session)}</h1> : <h1>No session</h1>}
@@ -92,7 +87,6 @@ function Home({ address, session }: { address: any; session: any }) {
             .then(console.log);
         }}
       >
-        {' '}
         Join Match{' '}
       </button>
     </div>

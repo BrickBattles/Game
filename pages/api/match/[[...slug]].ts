@@ -31,6 +31,7 @@ class MatchController {
         m.players.add(userId);
         if (m.players.size === 2) {
           m.state = MatchState.STARTING;
+          console.log('starting match soon');
         }
         this.matches.set(matchId, m);
         console.log(`match: ${matchId} joined by: ${userId} `);
@@ -67,7 +68,11 @@ class MatchController {
     return data;
   }
   async getTableData() {
-    return this.matches.values();
+    const data: { [key: string]: any } = {};
+    this.matches.forEach((value, key) => {
+      data[key] = value;
+    });
+    return data;
   }
 }
 

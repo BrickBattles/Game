@@ -60,7 +60,7 @@ function Home({ address, session }: { address: any; session: any }) {
       {authState === AuthState.AUTHENTICATED ? (
         <div className='hero min-h-screen bg-base-200'>
           <div className='hero-content text-center'>
-            <div className='max-w-md'>
+            <div className='max-w-xl'>
               {homeState === HomeState.MATCH_TABLE ? <MatchTable /> : <Game />}
             </div>
           </div>
@@ -79,16 +79,6 @@ function Home({ address, session }: { address: any; session: any }) {
         {address ? <h1>Authenticated as {address}</h1> : <h1>Unauthenticated</h1>}
         {session ? <h1>Session: {JSON.stringify(session)}</h1> : <h1>No session</h1>}
       </footer>
-      <button
-        className='btn btn-primary'
-        onClick={() => {
-          fetch(`http://localhost:3000/api/match/join`)
-            .then((res) => res.json())
-            .then(console.log);
-        }}
-      >
-        Join Match{' '}
-      </button>
     </div>
   );
 }

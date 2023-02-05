@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { Match, MatchState } from '../../classes/match';
 import WaitingModal from './modals/waitingModal';
 import axios from 'axios';
+
+// for testing
+import { v4 as uuidv4 } from 'uuid';
+
 const MatchTable: NextPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,12 +22,11 @@ const MatchTable: NextPage = () => {
 
   async function createThenFetch() {
     setLoading(true);
-    await fetch('http://localhost:3000/api/match/create').then(() => {
-      fetch('http://localhost:3000/api/match/getAll')
-        .then((res) => res.json())
-        .then((res) => setData(res))
-        .then(() => setLoading(false));
-    });
+    await fetch('http://localhost:3000/api/match/create');
+    await fetch('http://localhost:3000/api/match/getAll')
+      .then((res) => res.json())
+      .then((res) => setData(res))
+      .then(() => setLoading(false));
   }
 
   async function joinThenFetch(matchId: string, userId: string) {
@@ -33,21 +36,21 @@ const MatchTable: NextPage = () => {
       { matchId: matchId, userId: userId },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    const res = await fetch('http://localhost:3000/api/match/getAll').then((res) => res.json());
-    setData(res);
+    await fetch('http://localhost:3000/api/match/getAll')
+      .then((res) => res.json())
+      .then((res) => setData(res));
     setJoined(true);
     setLoading(false);
   }
 
-  if (loading) return <WaitingModal header='Success' message='Waiting for other players' />;
+  if (loading) return <WaitingModal header='Loading...' message='' />;
 
-  if (joined)
-    return <WaitingModal header='Waiting for other players' message='Waiting for other players' />;
+  if (joined) return <WaitingModal header='Success' message='Waiting for other players' />;
 
   return (
     <div>
       <div className='overflow-x-auto'>
-        {data.length == 0 ? (
+        {Object.keys(data).length === 0 || data == undefined || data == null ? (
           <div>
             <h1>No matches available</h1>
           </div>
@@ -75,9 +78,7 @@ const MatchTable: NextPage = () => {
                       <td>
                         <button
                           className='btn btn-primary'
-                          onClick={() =>
-                            joinThenFetch('123', '0x43E941D849fE17D00A8787BC0652a2d0C3578553')
-                          }
+                          onClick={() => joinThenFetch('123', uuidv4())}
                         >
                           Join
                         </button>
@@ -91,15 +92,11 @@ const MatchTable: NextPage = () => {
         )}
       </div>
 
-      <button className='btn btn-primary' onClick={createThenFetch}>
-        Create Match
-      </button>
-      <button
-        className='btn btn-primary'
-        onClick={() => joinThenFetch('123', '0x43E941D849fE17D00A8787BC0652a2d0C3578553')}
-      >
-        Join
-      </button>
+      <div className='py-5'>
+        <button className='btn btn-primary' onClick={createThenFetch}>
+          Create Match
+        </button>
+      </div>
     </div>
   );
 };

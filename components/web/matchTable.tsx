@@ -39,8 +39,7 @@ const MatchTable: NextPage = () => {
     setLoading(false);
   }
 
-  if (loading)
-    return <WaitingModal header='Waiting for other players' message='Waiting for other players' />;
+  if (loading) return <WaitingModal header='Success' message='Waiting for other players' />;
 
   if (joined)
     return <WaitingModal header='Waiting for other players' message='Waiting for other players' />;

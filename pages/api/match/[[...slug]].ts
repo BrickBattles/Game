@@ -20,6 +20,7 @@ class MatchController {
       id: `${process.env.NEXT_PUBLIC_DEV_ADDRESS}/match/${matchId}`,
     });
     this.matches.set(matchId, new Match(matchId, stream.id));
+    console.log(`match: ${matchId} created`);
     return stream.id;
   }
 
@@ -32,6 +33,7 @@ class MatchController {
           m.state = MatchState.STARTING;
         }
         this.matches.set(matchId, m);
+        console.log(`match: ${matchId} joined by: ${userId} `);
         return true;
       } else {
         console.log('match full');
@@ -69,8 +71,8 @@ class MatchController {
   }
 }
 
+const matchController = new MatchController();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let matchController = new MatchController();
   const { slug } = req.query;
   let matchId = '123';
 

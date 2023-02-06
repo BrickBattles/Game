@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from 'react';
-
-import { NextPage } from 'next';
 import GameConfig from '../util/GameConfig';
 import EventsCenter from '../util/EventsCenter';
-import { MatchData } from '../../classes/matchData';
 
 import { StreamrClient } from 'streamr-client';
 
-const Game = () => {
-  let streamId = '';
-  let matchId = '';
-
+function Game({ streamId, matchId }: { streamId: string; matchId: string }) {
+  if (streamId === undefined || streamId === '') {
+    streamId = `${process.env.NEXT_PUBLIC_DEV_ADDRESS}/match/123`; // default for testing
+  }
   // start phaser game
   useEffect(() => {
     async function init() {
-      let { streamId: streamId, matchId: matchId } = await fetch('/api/match').then((res) =>
-        res.json()
-      );
-
       const streamr = new StreamrClient({
         logLevel: 'debug',
       });
@@ -57,6 +50,6 @@ const Game = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Game;

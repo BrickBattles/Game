@@ -16,12 +16,23 @@ class MatchController {
   }
 
   async createMatch(matchId: string) {
-    const stream = await this.streamr.getOrCreateStream({
-      id: `${process.env.NEXT_PUBLIC_DEV_ADDRESS}/match/${matchId}`,
-    });
-    this.matches.set(matchId, new Match(matchId, stream.id));
-    console.log(`match: ${matchId} created`);
-    return stream.id;
+    const streamId = `${process.env.NEXT_PUBLIC_DEV_ADDRESS}/match/${matchId}`;
+    this.matches.set(matchId, new Match(matchId, streamId));
+    return streamId;
+  }
+
+  async startMatch(matchId: string) {
+    if (this.matches.has(matchId)) {
+      const m = this.matches.get(matchId) as Match;
+      const stream = await this.streamr.getOrCreateStream({
+        id: m.streamId,
+      });
+      m.state = MatchState.IN_PROGRESS;
+      this.matches.set(matchId, m);
+      return true;
+    }
+
+    return false;
   }
 
   async joinMatch(matchId: string, userId: string) {

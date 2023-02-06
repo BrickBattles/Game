@@ -5,54 +5,45 @@ import Navbar from '../components/web/navbar';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession } from 'next-auth/react';
 import { getToken } from 'next-auth/jwt';
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 
 import { StreamrClient } from 'streamr-client';
 import { InjectedConnector } from '@wagmi/core';
-
-const Game = dynamic(() => import('../components/game/game'), { ssr: false });
 
 enum AuthState {
   UNAUTHENTICATED,
   AUTHENTICATED,
 }
 
-enum HomeState {
-  MATCH_TABLE,
-  GAME,
-  WAITING,
-}
-
 function Home({ address, session }: { address: any; session: any }) {
   const [authState, setAuthState] = useState<AuthState>(AuthState.UNAUTHENTICATED);
-  const [homeState, setHomeState] = useState<HomeState>(HomeState.MATCH_TABLE);
 
   useEffect(() => {
     if (address) setAuthState(AuthState.AUTHENTICATED);
     else setAuthState(AuthState.UNAUTHENTICATED);
   }, [session]);
 
-  const joinMatch = async () => {
-    // tell server to create match
-    let res = await fetch(`http://localhost:3000/api/match`).then((res) => res.json());
-    const matchId = res.matchId;
-    const streamId = res.streamId;
+  // const joinMatch = async () => {
+  //   // tell server to create match
+  //   let res = await fetch(`http://localhost:3000/api/match`).then((res) => res.json());
+  //   const matchId = res.matchId;
+  //   const streamId = res.streamId;
 
-    const connector = new InjectedConnector();
-    const provider = await connector.getProvider();
+  //   const connector = new InjectedConnector();
+  //   const provider = await connector.getProvider();
 
-    const streamr = new StreamrClient({
-      logLevel: 'debug',
-      auth: {
-        ethereum: provider,
-      },
-    });
+  //   const streamr = new StreamrClient({
+  //     logLevel: 'debug',
+  //     auth: {
+  //       ethereum: provider,
+  //     },
+  //   });
 
-    await streamr.subscribe(streamId, (content, metadata) => {
-      console.log('received message', content, metadata);
-      if (content === 'start') setHomeState(HomeState.GAME);
-    });
-  };
+  //   await streamr.subscribe(streamId, (content, metadata) => {
+  //     console.log('received message', content, metadata);
+  //     if (content === 'start') setUserState(UserState.GAME);
+  //   });
+  // };
 
   return (
     <div>
@@ -61,7 +52,7 @@ function Home({ address, session }: { address: any; session: any }) {
         <div className='hero min-h-screen bg-base-200'>
           <div className='hero-content text-center'>
             <div className='max-w-xl'>
-              {homeState === HomeState.MATCH_TABLE ? <MatchTable /> : <Game />}
+              <MatchTable />
             </div>
           </div>
         </div>

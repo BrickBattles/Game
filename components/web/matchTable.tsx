@@ -7,7 +7,7 @@ import axios from 'axios';
 // for testing
 import { v4 as uuidv4 } from 'uuid';
 
-const MatchTable: NextPage = () => {
+function MatchTable(props: any) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(false);
@@ -99,6 +99,6 @@ const MatchTable: NextPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MatchTable;

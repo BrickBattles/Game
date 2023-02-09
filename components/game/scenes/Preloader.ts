@@ -7,12 +7,15 @@ export default class Preloader extends Scene {
 
   preload() {
     // Load assets
-    this.load.image('brick', 'textures/silver.png');
-    this.load.image('background', 'backgrounds/3.png');
+    // this.load.image('brick', 'textures/silver.png');
+    // this.load.image('background', 'backgrounds/3.png');
 
-    this.load.spritesheet('uzi', 'guns/Spritesheets/uzi.png', { frameWidth: 60, frameHeight: 40 });
+    // this.load.spritesheet('uzi', 'guns/Spritesheets/uzi.png', { frameWidth: 60, frameHeight: 40 });
 
-    this.load.image('bullet', 'guns/bullet_right.png');
+    // this.load.image('bullet', 'guns/bullet_right.png');
+
+    this.load.image('map', '/map.png');
+    this.load.image('knight', '/knight.png');
   }
 
   create() {

@@ -5,8 +5,6 @@ import MainScene from '../game/scenes/MainScene';
 
 const GameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  width: 1000,
-  height: 500,
   backgroundColor: '#ffffff',
   parent: 'game-content',
   pixelArt: true,
@@ -20,8 +18,8 @@ const GameConfig: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 700,
-    height: 400,
+    width: 500,
+    height: 800,
   },
 };
 

@@ -16,6 +16,7 @@
     "@tableland/cli": "^4.0.0",
     "@tableland/sdk": "4.0.0-pre.4",
     "@types/matter-js": "^0.18.2",
+    "@wagmi/cli": "^0.1.5",
     "alchemy-sdk": "^2.4.0",
     "axios": "^1.3.0",
     "daisyui": "^2.46.0",

@@ -5,21 +5,22 @@ import EventsCenter from '../util/EventsCenter';
 import { StreamrClient } from 'streamr-client';
 
 function Game({ streamId, matchId }: { streamId: string; matchId: string }) {
-  if (streamId === undefined || streamId === '') {
+  if (streamId === undefined || streamId === '' || matchId === undefined || matchId === '') {
     streamId = `${process.env.NEXT_PUBLIC_DEV_ADDRESS}/match/123`; // default for testing
+    matchId = '123';
   }
   // start phaser game
   useEffect(() => {
     async function init() {
-      const streamr = new StreamrClient({
-        logLevel: 'debug',
-      });
+      // const streamr = new StreamrClient({
+      //   logLevel: 'debug',
+      // });
 
-      await streamr.subscribe(streamId, (content, meta) => {
-        console.log(`content: ${JSON.stringify(content)}`);
-        console.log(`meta: ${JSON.stringify(meta)}`);
-        console.log('-----------------');
-      });
+      // await streamr.subscribe(streamId, (content, meta) => {
+      //   console.log(`content: ${JSON.stringify(content)}`);
+      //   console.log(`meta: ${JSON.stringify(meta)}`);
+      //   console.log('-----------------');
+      // });
 
       // channel.subscribe((message: Types.Message) => {
       //   if (message.name === 'initialize') {
@@ -27,8 +28,9 @@ function Game({ streamId, matchId }: { streamId: string; matchId: string }) {
       //   }
       // });
 
-      // EventsCenter.on('update_match', (match: MatchData) => {
-      //   channel.publish('update_match', match);
+      // EventsCenter.on('troop-placed', (data: any) => {
+      //   console.log(`sending...\n${JSON.stringify(data)}`);
+      //   streamr.publish(streamId, data);
       // });
 
       const Phaser = await import('phaser');

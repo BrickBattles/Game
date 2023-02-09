@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Match, MatchState } from '../../../classes/match';
-import StreamrClient from 'streamr-client';
+import StreamrClient, { StreamPermission } from 'streamr-client';
 
 class MatchController {
   matches: Map<string, Match> = new Map();
@@ -27,6 +27,12 @@ class MatchController {
       const stream = await this.streamr.getOrCreateStream({
         id: m.streamId,
       });
+
+      await stream.grantPermissions({
+        public: true,
+        permissions: [StreamPermission.PUBLISH, StreamPermission.SUBSCRIBE],
+      });
+
       m.state = MatchState.IN_PROGRESS;
       this.matches.set(matchId, m);
       return true;
@@ -42,9 +48,11 @@ class MatchController {
         m.players.add(userId);
         if (m.players.size === 2) {
           m.state = MatchState.STARTING;
-          console.log('starting match soon');
+          this.matches.set(matchId, m);
+          await this.startMatch(matchId);
+        } else {
+          this.matches.set(matchId, m);
         }
-        this.matches.set(matchId, m);
         console.log(`match: ${matchId} joined by: ${userId} `);
         return true;
       } else {

@@ -23,28 +23,6 @@ function Home({ address, session }: { address: any; session: any }) {
     else setAuthState(AuthState.UNAUTHENTICATED);
   }, [session]);
 
-  // const joinMatch = async () => {
-  //   // tell server to create match
-  //   let res = await fetch(`http://localhost:3000/api/match`).then((res) => res.json());
-  //   const matchId = res.matchId;
-  //   const streamId = res.streamId;
-
-  //   const connector = new InjectedConnector();
-  //   const provider = await connector.getProvider();
-
-  //   const streamr = new StreamrClient({
-  //     logLevel: 'debug',
-  //     auth: {
-  //       ethereum: provider,
-  //     },
-  //   });
-
-  //   await streamr.subscribe(streamId, (content, metadata) => {
-  //     console.log('received message', content, metadata);
-  //     if (content === 'start') setUserState(UserState.GAME);
-  //   });
-  // };
-
   return (
     <div>
       <Navbar />
@@ -52,7 +30,7 @@ function Home({ address, session }: { address: any; session: any }) {
         <div className='hero min-h-screen bg-base-200'>
           <div className='hero-content text-center'>
             <div className='max-w-xl'>
-              <MatchTable />
+              <MatchTable address={address} />
             </div>
           </div>
         </div>

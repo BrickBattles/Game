@@ -1,11 +1,12 @@
 import { Scene } from 'phaser';
-import EventsCenter from '../../util/EventsCenter';
-import StreamrClient from 'streamr-client';
-import { useEffect } from 'react';
+
+import Knight from '../sprites/knight';
+import IBar from '../ui/IBar';
 export default class MainScene extends Scene {
   streamId: string;
   matchId: string;
   streamr: any;
+  mana: any;
 
   constructor() {
     super('mainscene');
@@ -14,9 +15,7 @@ export default class MainScene extends Scene {
   init() {
     this.streamId = this.registry.get('streamId');
     this.matchId = this.registry.get('matchId');
-    this.streamr = new StreamrClient({
-      logLevel: 'debug',
-    });
+    this.streamr = this.registry.get('streamr');
   }
 
   preload() {}
@@ -26,9 +25,10 @@ export default class MainScene extends Scene {
     bg.setDepth(-1);
     bg.setScale(0.75);
 
+    this.mana = new IBar(this, 150, 750, 200, 50);
+
     this.input.on('pointerdown', (pointer: any) => {
-      let x = this.add.sprite(pointer.x, pointer.y, 'knight');
-      x.setScale(0.25);
+      new Knight({ scene: this, x: pointer.x, y: pointer.y });
 
       this.streamr.publish(this.streamId, {
         action: 'place_troop',
@@ -48,5 +48,7 @@ export default class MainScene extends Scene {
     });
   }
 
-  update() {}
+  update() {
+    this.mana.update();
+  }
 }

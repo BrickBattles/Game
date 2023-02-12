@@ -24,14 +24,65 @@ class MatchController {
   async startMatch(matchId: string) {
     if (this.matches.has(matchId)) {
       const m = this.matches.get(matchId) as Match;
+
+      if (m.state === MatchState.IN_PROGRESS) return true;
+
+      if (m.players.size !== 2) return false;
+
+      // for testing ------------------------------------
+
       const stream = await this.streamr.getOrCreateStream({
         id: m.streamId,
       });
 
       await stream.grantPermissions({
         public: true,
-        permissions: [StreamPermission.PUBLISH, StreamPermission.SUBSCRIBE],
+        permissions: [StreamPermission.SUBSCRIBE, StreamPermission.PUBLISH],
       });
+      // -----------------------------------------------
+
+      // const client_stream = await this.streamr.getOrCreateStream({
+      //   id: `${m.streamId}/client`,
+      // });
+
+      // const server_stream = await this.streamr.getOrCreateStream({
+      //   id: `${m.streamId}/server`,
+      // });
+
+      // const client_permissions = await client_stream.getPermissions();
+      // const server_permissions = await server_stream.getPermissions();
+
+      // const players = Array.from(m.players);
+
+      // await client_stream.grantPermissions(
+      //   {
+      //     user: players[0],
+      //     permissions: [StreamPermission.PUBLISH],
+      //   },
+      //   {
+      //     user: players[1],
+      //     permissions: [StreamPermission.PUBLISH],
+      //   },
+      //   {
+      //     user: process.env.NEXT_PUBLIC_DEV_ADDRESS!,
+      //     permissions: [StreamPermission.SUBSCRIBE],
+      //   }
+      // );
+
+      // await server_stream.grantPermissions(
+      //   {
+      //     user: players[0],
+      //     permissions: [StreamPermission.SUBSCRIBE],
+      //   },
+      //   {
+      //     user: players[1],
+      //     permissions: [StreamPermission.SUBSCRIBE],
+      //   },
+      //   {
+      //     user: process.env.NEXT_PUBLIC_DEV_ADDRESS!,
+      //     permissions: [StreamPermission.PUBLISH],
+      //   }
+      // );
 
       m.state = MatchState.IN_PROGRESS;
       this.matches.set(matchId, m);
@@ -49,7 +100,11 @@ class MatchController {
         if (m.players.size === 2) {
           m.state = MatchState.STARTING;
           this.matches.set(matchId, m);
-          await this.startMatch(matchId);
+          const started = await this.startMatch(matchId);
+          if (!started) {
+            console.log('match failed to start');
+            return false;
+          }
         } else {
           this.matches.set(matchId, m);
         }
@@ -111,7 +166,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       let userId = req.body.userId as string;
 
       let join = await matchController.joinMatch(matchId, userId);
-
       if (!join) {
         res.status(400).json({ error: `User: ${userId} Joining match: ${matchId} failed` });
       } else {
@@ -120,6 +174,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (opt === 'getAll') {
       let data = await matchController.getTableData();
       res.status(200).json(data);
+    } else if (opt === 'checkIfStarted') {
+      let start = await matchController.startMatch(matchId);
+      if (start) {
+        res.status(200);
+      } else {
+        res.status(400);
+      }
     } else {
       res.status(400).json({ error: `Invalid slug: ${slug} ${opt}` });
     }

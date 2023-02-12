@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react';
 import { Match, MatchState } from '../../classes/match';
 import WaitingModal from './modals/waitingModal';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 // for testing
-import { v4 as uuidv4 } from 'uuid';
 
 function MatchTable(props: any) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [joined, setJoined] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     async function init() {
@@ -30,17 +32,47 @@ function MatchTable(props: any) {
   }
 
   async function joinThenFetch(matchId: string, userId: string) {
+    console.log(`Joining match ${matchId} with user ${userId}...`);
     setLoading(true);
-    await axios.post(
-      'http://localhost:3000/api/match/join',
-      { matchId: matchId, userId: userId },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    await axios
+      .post(
+        'http://localhost:3000/api/match/join',
+        { matchId: matchId, userId: userId },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('Successfully joined match');
+        } else {
+          console.log('Failed to join match (status code: ' + res.status + ')');
+        }
+      });
+
     await fetch('http://localhost:3000/api/match/getAll')
       .then((res) => res.json())
       .then((res) => setData(res));
     setJoined(true);
     setLoading(false);
+
+    async function checkIfStarted() {
+      await axios
+        .post(
+          'http://localhost:3000/api/match/checkIfStarted',
+          { matchId: matchId },
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            console.log('started');
+            router.push('/game');
+          } else {
+            console.log('not started');
+            setTimeout(checkIfStarted, 1000);
+          }
+        });
+    }
+
+    await checkIfStarted();
   }
 
   if (loading) return <WaitingModal header='Loading...' message='' />;
@@ -78,7 +110,7 @@ function MatchTable(props: any) {
                       <td>
                         <button
                           className='btn btn-primary'
-                          onClick={() => joinThenFetch('123', uuidv4())}
+                          onClick={() => joinThenFetch(match.id, props.address)}
                         >
                           Join
                         </button>

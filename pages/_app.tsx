@@ -13,27 +13,27 @@ import {
   GetSiweMessageOptions,
 } from '@rainbow-me/rainbowkit-siwe-next-auth';
 
-const { chains, provider } = configureChains(
-  [polygon],
-  [alchemyProvider({ apiKey: process.env.ALCH_KEY! }), publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: 'BrickBattles',
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
-
-const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: 'Sign in to BrickBattles',
-});
-
 function MyApp({ Component, pageProps }: AppProps) {
+  const { chains, provider } = configureChains(
+    [polygon],
+    [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCH_KEY! }), publicProvider()]
+  );
+
+  const { connectors } = getDefaultWallets({
+    appName: 'BrickBattles',
+    chains,
+  });
+
+  const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider,
+  });
+
+  const getSiweMessageOptions: GetSiweMessageOptions = () => ({
+    statement: 'Sign in to BrickBattles',
+  });
+
   return (
     <WagmiConfig client={wagmiClient}>
       <SessionProvider session={pageProps.session} refetchInterval={0}>

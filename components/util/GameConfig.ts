@@ -12,13 +12,14 @@ const GameConfig: Phaser.Types.Core.GameConfig = {
     default: 'matter',
     matter: {
       debug: true,
+      gravity: false,
     },
   },
   scene: [Preloader, MainScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 500,
+    width: 480,
     height: 800,
   },
 };

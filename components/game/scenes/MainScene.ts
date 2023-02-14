@@ -23,7 +23,6 @@ export default class MainScene extends Scene {
   create() {
     let bg = this.add.image(0, 0, 'map').setOrigin(0, 0);
     bg.setDepth(-1);
-    bg.setScale(0.75);
 
     this.mana = new IBar(this, 150, 750, 200, 50);
 
@@ -42,8 +41,7 @@ export default class MainScene extends Scene {
     this.streamr.subscribe(this.streamId, (message: any) => {
       console.log(message);
       if (message.action === 'place_troop') {
-        let x = this.add.sprite(message.troop.x, message.troop.y, 'knight');
-        x.setScale(0.25);
+        // let x = this.add.sprite(message.troop.x, message.troop.y, 'knight');
       }
     });
   }

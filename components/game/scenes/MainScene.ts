@@ -27,6 +27,9 @@ export default class MainScene extends Scene {
     this.mana = new IBar(this, 150, 750, 200, 50);
 
     this.input.on('pointerdown', (pointer: any) => {
+      if (pointer.y < 440) return;
+      if (this.mana.val < 200) return;
+      this.mana.troopPlaced(200);
       new Knight({ scene: this, x: pointer.x, y: pointer.y });
 
       this.streamr.publish(this.streamId, {

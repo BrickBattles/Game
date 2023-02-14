@@ -2,7 +2,7 @@ import 'phaser';
 
 class IBar extends Phaser.GameObjects.Graphics {
   id: string;
-  val: number = 100; // 0 -> 100 where val / 10 = amount of mana
+  val: number = 0; // 0 -> 1000 where val / 10 = amount of mana
 
   orig_x: number;
   orig_y: number;
@@ -24,8 +24,16 @@ class IBar extends Phaser.GameObjects.Graphics {
   }
 
   update() {
+    if (this.val < 1000) {
+      this.val++;
+    }
     this.fillStyle(0x8a2be2, 0.6);
-    this.fillRect(this.orig_x + 5, this.orig_y + 5, this.w * (this.val / 100) - 10, this.h - 10);
+    let val_w = this.w * (this.val / 1000) - 10;
+    this.fillRect(this.orig_x + 5, this.orig_y + 5, val_w < 0 ? 0 : val_w, this.h - 10);
+  }
+
+  troopPlaced(cost: number) {
+    this.val -= cost;
   }
 }
 

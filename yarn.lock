@@ -3639,6 +3639,13 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
+easystarjs@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/easystarjs/-/easystarjs-0.4.4.tgz#8cec6d20d0d8660715da0301d1da440370a8f40a"
+  integrity sha512-ZSt0TkB8xuIXRIrKsM3jkmk1/cZUtyvf0DqOXf6wuKq9slx9UA5kkLtiaWhtmOQFJFKdabbvXwk6RO0znghArQ==
+  dependencies:
+    heap "0.2.6"
+
 eip1193-provider@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/eip1193-provider/-/eip1193-provider-1.0.1.tgz#420d29cf4f6c443e3f32e718fb16fafb250637c3"
@@ -4543,6 +4550,11 @@ header-case@^2.0.4:
   dependencies:
     capital-case "^1.0.4"
     tslib "^2.0.3"
+
+heap@0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/heap/-/heap-0.2.6.tgz#087e1f10b046932fc8594dd9e6d378afc9d1e5ac"
+  integrity sha512-MzzWcnfB1e4EG2vHi3dXHoBupmuXNZzx6pY6HldVS55JKKBoq3xOyzfSaZRkJp37HIhEYC78knabHff3zc4dQQ==
 
 heap@^0.2.6:
   version "0.2.7"

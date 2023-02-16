@@ -32,13 +32,13 @@ export default class MainScene extends Scene {
       this.mana.troopPlaced(200);
       new Knight({ scene: this, x: pointer.x, y: pointer.y });
 
-      this.streamr.publish(this.streamId, {
-        action: 'place_troop',
-        troop: {
-          x: pointer.x,
-          y: pointer.y,
-        },
-      });
+      // this.streamr.publish(this.streamId, {
+      //   action: 'place_troop',
+      //   troop: {
+      //     x: pointer.x,
+      //     y: pointer.y,
+      //   },
+      // });
     });
 
     this.streamr.subscribe(this.streamId, (message: any) => {
